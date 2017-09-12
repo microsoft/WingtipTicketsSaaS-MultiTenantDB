@@ -43,7 +43,9 @@ namespace Events_Tenant.Common.Mapping
                 PostalCode = customer.PostalCode,
                 LastName = customer.LastName,
                 CountryCode = customer.CountryCode,
-                CustomerId = customer.CustomerId
+                CustomerId = customer.CustomerId,
+                VenueId = customer.VenueId,
+                RowVersion = customer.RowVersion
             };
         }
 
@@ -53,7 +55,9 @@ namespace Events_Tenant.Common.Mapping
             {
                 EventId = eventsection.EventId,
                 Price = eventsection.Price,
-                SectionId = eventsection.SectionId
+                SectionId = eventsection.SectionId,
+                VenueId = eventsection.VenueId,
+                RowVersion = eventsection.RowVersion
             };
         }
 
@@ -64,7 +68,9 @@ namespace Events_Tenant.Common.Mapping
                 Date = eventEntity.Date,
                 EventId = eventEntity.EventId,
                 EventName = eventEntity.EventName.Trim(),
-                SubTitle = eventEntity.Subtitle.Trim()
+                SubTitle = eventEntity.Subtitle.Trim(),
+                VenueId = eventEntity.VenueId,
+                RowVersion = eventEntity.RowVersion
             };
         }
 
@@ -76,7 +82,9 @@ namespace Events_Tenant.Common.Mapping
                 SeatsPerRow = section.SeatsPerRow,
                 SectionName = section.SectionName,
                 SeatRows = section.SeatRows,
-                StandardPrice = section.StandardPrice
+                StandardPrice = section.StandardPrice,
+                VenueId = section.VenueId,
+                RowVersion = section.RowVersion
             };
         }
 
@@ -89,7 +97,9 @@ namespace Events_Tenant.Common.Mapping
                 AdminPassword = venueModel.AdminPassword,
                 CountryCode = venueModel.CountryCode.Trim(),
                 PostalCode = venueModel.PostalCode,
-                VenueType = venueModel.VenueType.Trim()
+                VenueType = venueModel.VenueType.Trim(),
+                VenueId = venueModel.VenueId,
+                RowVersion = venueModel.RowVersion
             };
         }
 
@@ -118,7 +128,9 @@ namespace Events_Tenant.Common.Mapping
                 Email = customeModel.Email,
                 FirstName = customeModel.FirstName,
                 LastName = customeModel.LastName,
-                PostalCode = customeModel.PostalCode
+                PostalCode = customeModel.PostalCode,
+                VenueId = customeModel.VenueId,
+                RowVersion = customeModel.RowVersion
             };
         }
 
@@ -129,7 +141,9 @@ namespace Events_Tenant.Common.Mapping
             {
                 CustomerId = ticketPurchaseModel.CustomerId,
                 PurchaseDate = DateTime.Now,
-                PurchaseTotal = ticketPurchaseModel.PurchaseTotal
+                PurchaseTotal = ticketPurchaseModel.PurchaseTotal,
+                VenueId = ticketPurchaseModel.VenueId,
+                RowVersion = ticketPurchaseModel.RowVersion
             };
         }
 
@@ -141,7 +155,8 @@ namespace Events_Tenant.Common.Mapping
                 SectionId = ticketModel.SectionId,
                 EventId = ticketModel.EventId,
                 RowNumber = ticketModel.RowNumber,
-                SeatNumber = ticketModel.SeatNumber
+                SeatNumber = ticketModel.SeatNumber,
+                VenueId = ticketModel.VenueId
             };
         }
 
