@@ -1,15 +1,15 @@
 ﻿CREATE TABLE [dbo].[TicketPurchases]
 (
-    [TicketPurchaseId]  INT         NOT NULL IDENTITY (1,1), 
+    [VenueId]           INT         NOT NULL,
+    [TicketPurchaseId]  INT         NOT NULL IDENTITY, 
     [PurchaseDate]      DATETIME    NOT NULL, 
     [PurchaseTotal]     MONEY       NOT NULL,
     [CustomerId]        INT         NOT NULL,
-    [RowVersion]        ROWVERSION, 
-    PRIMARY KEY CLUSTERED ([TicketPurchaseId] ASC), 
-    CONSTRAINT [FK_TicketPurchases_Customers] FOREIGN KEY ([CustomerId]) REFERENCES [Customers]([CustomerId])
+    [RowVersion]        ROWVERSION  NOT NULL, 
+    PRIMARY KEY CLUSTERED ([VenueId], [TicketPurchaseId] ASC), 
+    CONSTRAINT [FK_TicketPurchases_Customers] FOREIGN KEY ([VenueId], [CustomerId]) REFERENCES [Customers]([VenueId], [CustomerId])
 )
-
 GO
 
-
 CREATE INDEX [IX_TicketPurchases_CustomerId] ON [dbo].[TicketPurchases] (CustomerId)
+GO

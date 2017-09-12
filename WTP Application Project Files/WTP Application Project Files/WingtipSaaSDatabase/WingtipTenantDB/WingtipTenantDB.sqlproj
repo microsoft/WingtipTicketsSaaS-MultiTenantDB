@@ -57,40 +57,34 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="dbo\" />
-    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo" />
     <Folder Include="dbo\StoredProcedures" />
-    <Folder Include="SetupScripts" />
-    <Folder Include="DemoScripts" />
+    <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Views" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="dbo\Tables\Venue.sql" />
-    <Build Include="dbo\Tables\Tickets.sql" />
-    <Build Include="dbo\Tables\EventSections.sql" />
-    <Build Include="dbo\Tables\Sections.sql" />
-    <Build Include="dbo\Tables\Customers.sql" />
-    <Build Include="dbo\Tables\Events.sql" />
-    <Build Include="dbo\Tables\VenueTypes.sql" />
-    <Build Include="dbo\Tables\Countries.sql" />
-    <Build Include="dbo\Tables\TicketPurchases.sql" />
-    <Build Include="dbo\StoredProcedures\sp_CpuLoadGenerator.sql" />
-    <Build Include="dbo\StoredProcedures\sp_ResetEventDates.sql" />
-    <None Include="SetupScripts\ContosoConcertHall.sql" />
-    <None Include="SetupScripts\DogwoodDojo.sql" />
-    <None Include="SetupScripts\FabrikamJazzClub.sql" />
-    <PostDeploy Include="SetupScripts\PostDeployment.sql" />
-    <None Include="DemoScripts\UpdateVenueTypes.sql" />
-    <Build Include="dbo\StoredProcedures\sp_RemoveShardManagement.sql" />
-    <Build Include="dbo\Views\EventsWithNoTickets.sql" />
-    <Build Include="dbo\StoredProcedures\sp_DeleteEvent.sql" />
-    <Build Include="dbo\Views\VenueTickets.sql" />
-    <Build Include="dbo\Views\VenueTicketPurchases.sql" />
-    <Build Include="dbo\Views\Venues.sql" />
-    <Build Include="dbo\Views\VenueEvents.sql" />
-    <Build Include="dbo\Views\TicketFacts.sql" />
+    <Folder Include="DemoScripts" />
+    <Folder Include="SetupScripts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="WingtipTenantDB.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\StoredProcedures\sp_CpuLoadGenerator.sql" />
+    <Build Include="dbo\StoredProcedures\sp_DeleteEvent.sql" />
+    <Build Include="dbo\StoredProcedures\sp_NewVenue.sql" />
+    <Build Include="dbo\StoredProcedures\sp_RemoveShardManagement.sql" />
+    <Build Include="dbo\StoredProcedures\sp_ResetEventDates.sql" />
+    <Build Include="dbo\Tables\Countries.sql" />
+    <Build Include="dbo\Tables\Customers.sql" />
+    <Build Include="dbo\Tables\Events.sql" />
+    <Build Include="dbo\Tables\EventSections.sql" />
+    <Build Include="dbo\Tables\Sections.sql" />
+    <Build Include="dbo\Tables\TicketPurchases.sql" />
+    <Build Include="dbo\Tables\Tickets.sql" />
+    <Build Include="dbo\Tables\Venues.sql" />
+    <Build Include="dbo\Tables\VenueTypes.sql" />
+    <Build Include="dbo\Views\EventsWithNoTickets.sql" />
+    <Build Include="dbo\Views\TicketFacts.sql" />
+    <PostDeploy Include="SetupScripts\PostDeployment.sql" />
+    <None Include="SetupScripts\TenantInitialization.sql" />
   </ItemGroup>
 </Project>
