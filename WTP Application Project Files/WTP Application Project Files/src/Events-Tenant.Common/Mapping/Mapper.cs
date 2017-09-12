@@ -80,7 +80,7 @@ namespace Events_Tenant.Common.Mapping
             };
         }
 
-        public static VenueModel ToVenueModel(this Venue venueModel)
+        public static VenueModel ToVenueModel(this Venues venueModel)
         {
             return new VenueModel
             {

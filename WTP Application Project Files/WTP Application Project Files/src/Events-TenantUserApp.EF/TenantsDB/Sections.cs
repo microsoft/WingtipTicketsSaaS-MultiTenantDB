@@ -9,6 +9,7 @@ namespace Events_TenantUserApp.EF.TenantsDB
             EventSections = new HashSet<EventSections>();
         }
 
+        public int VenueId { get; set; }
         public int SectionId { get; set; }
         public string SectionName { get; set; }
         public short SeatRows { get; set; }
@@ -17,5 +18,6 @@ namespace Events_TenantUserApp.EF.TenantsDB
         public byte[] RowVersion { get; set; }
 
         public virtual ICollection<EventSections> EventSections { get; set; }
+        public virtual Venues Venue { get; set; }
     }
 }

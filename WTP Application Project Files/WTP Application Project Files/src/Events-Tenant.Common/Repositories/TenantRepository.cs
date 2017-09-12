@@ -212,7 +212,7 @@ namespace Events_Tenant.Common.Repositories
                     databaseName = sqlConn.Database;
                 }
 
-                var venue = await context.Venue.FirstOrDefaultAsync();
+                var venue = await context.Venues.FirstOrDefaultAsync();
 
                 if (venue != null)
                 {

@@ -7,7 +7,7 @@ namespace Events_TenantUserApp.EF.TenantsDB
         public Countries()
         {
             Customers = new HashSet<Customers>();
-            Venue = new HashSet<Venue>();
+            Venues = new HashSet<Venues>();
         }
 
         public string CountryCode { get; set; }
@@ -15,6 +15,6 @@ namespace Events_TenantUserApp.EF.TenantsDB
         public string Language { get; set; }
 
         public virtual ICollection<Customers> Customers { get; set; }
-        public virtual ICollection<Venue> Venue { get; set; }
+        public virtual ICollection<Venues> Venues { get; set; }
     }
 }

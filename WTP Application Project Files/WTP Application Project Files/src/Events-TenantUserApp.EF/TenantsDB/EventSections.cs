@@ -9,13 +9,14 @@ namespace Events_TenantUserApp.EF.TenantsDB
             Tickets = new HashSet<Tickets>();
         }
 
+        public int VenueId { get; set; }
         public int EventId { get; set; }
         public int SectionId { get; set; }
         public decimal Price { get; set; }
         public byte[] RowVersion { get; set; }
 
         public virtual ICollection<Tickets> Tickets { get; set; }
-        public virtual Events Event { get; set; }
-        public virtual Sections Section { get; set; }
+        public virtual Events Events { get; set; }
+        public virtual Sections Sections { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Events_TenantUserApp.EF.CatalogDB
             modelBuilder.Entity<Tenants>(entity =>
             {
                 entity.HasKey(e => e.TenantId)
-                    .HasName("PK__Tenants__2E9B47E15565CFCB");
+                    .HasName("PK__Tenants__2E9B47E193C43FDC");
 
                 entity.HasIndex(e => e.TenantName)
                     .HasName("IX_Tenants_TenantName");
@@ -27,7 +27,7 @@ namespace Events_TenantUserApp.EF.CatalogDB
 
                 entity.Property(e => e.ServicePlan)
                     .IsRequired()
-                    .HasMaxLength(30)
+                    .HasColumnType("char(10)")
                     .HasDefaultValueSql("'standard'");
 
                 entity.Property(e => e.TenantName)

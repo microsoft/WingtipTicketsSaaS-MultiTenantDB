@@ -6,7 +6,7 @@ namespace Events_TenantUserApp.EF.TenantsDB
     {
         public VenueTypes()
         {
-            Venue = new HashSet<Venue>();
+            Venues = new HashSet<Venues>();
         }
 
         public string VenueType { get; set; }
@@ -16,6 +16,6 @@ namespace Events_TenantUserApp.EF.TenantsDB
         public string EventTypeShortNamePlural { get; set; }
         public string Language { get; set; }
 
-        public virtual ICollection<Venue> Venue { get; set; }
+        public virtual ICollection<Venues> Venues { get; set; }
     }
 }

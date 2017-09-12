@@ -178,7 +178,7 @@
     <Compile Include="TenantsDB\TenantDbContext.cs" />
     <Compile Include="TenantsDB\TicketPurchases.cs" />
     <Compile Include="TenantsDB\Tickets.cs" />
-    <Compile Include="TenantsDB\Venue.cs" />
+    <Compile Include="TenantsDB\Venues.cs" />
     <Compile Include="TenantsDB\VenueTypes.cs" />
     <Compile Include="TenantsDdEF6\database_firewall_rules.cs" />
     <Compile Include="TenantsDdEF6\EventsWithNoTicket.cs" />
