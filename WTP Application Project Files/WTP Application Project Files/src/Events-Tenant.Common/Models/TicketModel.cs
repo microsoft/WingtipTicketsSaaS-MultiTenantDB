@@ -8,6 +8,7 @@
         public int EventId { get; set; }
         public int SectionId { get; set; }
         public int TicketPurchaseId { get; set; }
+        public int VenueId { get; set; }
     }
 }
 

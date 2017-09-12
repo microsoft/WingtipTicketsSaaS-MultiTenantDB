@@ -65,9 +65,9 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             };
         }
 
-        private async Task<VenueModel> GetVenue()
+        private async Task<VenuesModel> GetVenue()
         {
-            return new VenueModel
+            return new VenuesModel
             {
                 VenueName = "Venue 1",
                 PostalCode = "741",

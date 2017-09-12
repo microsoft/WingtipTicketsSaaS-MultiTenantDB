@@ -128,7 +128,7 @@
     <Compile Include="Models\TenantsModel.cs" />
     <Compile Include="Models\TicketModel.cs" />
     <Compile Include="Models\TicketPurchaseModel.cs" />
-    <Compile Include="Models\VenueModel.cs" />
+    <Compile Include="Models\VenuesModel.cs" />
     <Compile Include="Models\VenueTypeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\AppConfig.cs" />

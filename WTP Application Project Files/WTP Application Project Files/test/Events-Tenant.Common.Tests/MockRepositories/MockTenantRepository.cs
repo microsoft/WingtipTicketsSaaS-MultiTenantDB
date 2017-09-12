@@ -179,9 +179,9 @@ namespace Events_Tenant.Common.Tests.MockRepositories
             return TicketModels.Count;
         }
 
-        public async Task<VenueModel> GetVenueDetails(int tenantId)
+        public async Task<VenuesModel> GetVenueDetails(int tenantId)
         {
-            return new VenueModel
+            return new VenuesModel
             {
                 CountryCode = "USA",
                 VenueType = "pop",

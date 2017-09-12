@@ -80,9 +80,9 @@ namespace Events_Tenant.Common.Mapping
             };
         }
 
-        public static VenueModel ToVenueModel(this Venues venueModel)
+        public static VenuesModel ToVenueModel(this Venues venueModel)
         {
-            return new VenueModel
+            return new VenuesModel
             {
                 VenueName = venueModel.VenueName.Trim(),
                 AdminEmail = venueModel.AdminEmail.Trim(),

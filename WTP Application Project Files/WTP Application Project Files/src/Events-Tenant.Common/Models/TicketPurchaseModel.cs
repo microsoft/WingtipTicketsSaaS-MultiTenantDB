@@ -8,5 +8,7 @@ namespace Events_Tenant.Common.Models
         public DateTime PurchaseDate { get; set; }
         public decimal PurchaseTotal { get; set; }
         public int CustomerId { get; set; }
+        public int VenueId { get; set; }
+        public byte[] RowVersion { get; set; }
     }
 }

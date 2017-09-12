@@ -201,7 +201,7 @@ namespace Events_Tenant.Common.Repositories
 
         #region Venues
 
-        public async Task<VenueModel> GetVenueDetails(int tenantId)
+        public async Task<VenuesModel> GetVenueDetails(int tenantId)
         {
             using (var context = CreateContext(tenantId))
             {

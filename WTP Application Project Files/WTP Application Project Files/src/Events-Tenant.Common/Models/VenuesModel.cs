@@ -2,7 +2,7 @@
 
 namespace Events_Tenant.Common.Models
 {
-    public class VenueModel
+    public class VenuesModel
     {
         public int VenueId { get; set;  }
 
@@ -20,5 +20,7 @@ namespace Events_Tenant.Common.Models
         public string VenueType { get; set; }
 
         public string DatabaseName { get; set; }
+
+        public byte[] RowVersion { get; set; }
     }
 }

@@ -48,9 +48,9 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             Assert.Equal("Index", redirectToActionResult.ActionName);
         }
 
-        private async Task<VenueModel> GetVenueDetails()
+        private async Task<VenuesModel> GetVenueDetails()
         {
-            return new VenueModel
+            return new VenuesModel
             {
                 AdminEmail = "adminEmail",
                 AdminPassword = "Password",

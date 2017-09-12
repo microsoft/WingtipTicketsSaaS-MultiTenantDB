@@ -51,7 +51,7 @@ namespace Events_TenantUserApp.Controllers
                     //get the venue name for each tenant
                     foreach (var tenant in tenantsModel)
                     {
-                        VenueModel venue = await _tenantRepository.GetVenueDetails(tenant.TenantId);
+                        VenuesModel venue = await _tenantRepository.GetVenueDetails(tenant.TenantId);
 
                         if (venue != null)
                         {
