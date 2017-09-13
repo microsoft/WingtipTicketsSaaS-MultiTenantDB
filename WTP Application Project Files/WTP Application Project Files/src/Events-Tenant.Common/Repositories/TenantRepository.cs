@@ -59,6 +59,7 @@ namespace Events_Tenant.Common.Repositories
             using (var context = CreateContext(tenantId))
             {
                 var customer = customeModel.ToCustomersEntity();
+                customer.VenueId = tenantId;
 
                 context.Customers.Add(customer);
                 await context.SaveChangesAsync();
@@ -71,7 +72,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var customer = await context.Customers.Where(i => i.Email == email).FirstOrDefaultAsync();
+                var customer = await context.Customers.Where(i => i.Email == email && i.VenueId == tenantId).FirstOrDefaultAsync();
 
                 return customer?.ToCustomerModel();
             }
@@ -85,7 +86,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var eventsections = await context.EventSections.Where(i => i.EventId == eventId).ToListAsync();
+                var eventsections = await context.EventSections.Where(i => i.EventId == eventId && i.VenueId == tenantId).ToListAsync();
 
                 return eventsections.Count > 0 ? eventsections.Select(eventSection => eventSection.ToEventSectionModel()).ToList() : null;
             }
@@ -100,7 +101,7 @@ namespace Events_Tenant.Common.Repositories
             using (var context = CreateContext(tenantId))
             {
                 //Past events (yesterday and earlier) are not shown 
-                var events = await context.Events.Where(i => i.Date >= DateTime.Now).OrderBy(x => x.Date).ToListAsync();
+                var events = await context.Events.Where(i => i.Date >= DateTime.Now && i.VenueId == tenantId).OrderBy(x => x.Date).ToListAsync();
 
                 return events.Count > 0 ? events.Select(eventEntity => eventEntity.ToEventModel()).ToList() : null;
             }
@@ -110,7 +111,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var eventModel = await context.Events.Where(i => i.EventId == eventId).FirstOrDefaultAsync();
+                var eventModel = await context.Events.Where(i => i.EventId == eventId && i.VenueId == tenantId).FirstOrDefaultAsync();
 
                 return eventModel?.ToEventModel();
             }
@@ -124,7 +125,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var sections = await context.Sections.Where(i => sectionIds.Contains(i.SectionId)).ToListAsync();
+                var sections = await context.Sections.Where(i => sectionIds.Contains(i.SectionId) && i.VenueId == tenantId).ToListAsync();
 
                 return sections.Any() ? sections.Select(section => section.ToSectionModel()).ToList() : null;
             }
@@ -134,7 +135,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var section = await context.Sections.Where(i => i.SectionId == sectionId).FirstOrDefaultAsync();
+                var section = await context.Sections.Where(i => i.SectionId == sectionId && i.VenueId == tenantId).FirstOrDefaultAsync();
 
                 return section?.ToSectionModel();
             }
@@ -149,6 +150,7 @@ namespace Events_Tenant.Common.Repositories
             using (var context = CreateContext(tenantId))
             {
                 var ticketPurchase = ticketPurchaseModel.ToTicketPurchasesEntity();
+                ticketPurchase.VenueId = tenantId;
 
                 context.TicketPurchases.Add(ticketPurchase);
                 await context.SaveChangesAsync();
@@ -161,7 +163,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var ticketPurchases = await context.TicketPurchases.ToListAsync();
+                var ticketPurchases = await context.TicketPurchases.Where(i => i.VenueId == tenantId).ToListAsync();
                 if (ticketPurchases.Any())
                 {
                     return ticketPurchases.Count();
@@ -178,6 +180,8 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
+                ticketModel.VenueId = tenantId;
+
                 context.Tickets.Add(ticketModel.ToTicketsEntity());
                 await context.SaveChangesAsync();
             }
@@ -188,7 +192,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var tickets = await context.Tickets.Where(i => i.SectionId == sectionId && i.EventId == eventId).ToListAsync();
+                var tickets = await context.Tickets.Where(i => i.SectionId == sectionId && i.EventId == eventId && i.VenueId == tenantId).ToListAsync();
                 if (tickets.Any())
                 {
                     return tickets.Count();
