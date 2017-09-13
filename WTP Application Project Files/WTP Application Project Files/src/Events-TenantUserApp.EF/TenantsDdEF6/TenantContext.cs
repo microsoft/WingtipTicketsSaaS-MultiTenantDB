@@ -30,6 +30,12 @@ namespace Events_TenantUserApp.EF.TenantsDdEF6
             // Ask shard map to broker a validated connection for the given key
             SqlConnection sqlConn = shardMap.OpenConnectionForKey(shardingKey, connectionStr);
 
+            // Set TenantId in SESSION_CONTEXT to shardingKey to enable Row-Level Security filtering
+            SqlCommand cmd = sqlConn.CreateCommand();
+            cmd.CommandText = @"exec sp_set_session_context @key=N'TenantId', @value=@shardingKey";
+            cmd.Parameters.AddWithValue("@shardingKey", shardingKey);
+            cmd.ExecuteNonQuery();
+
             return sqlConn;
         }
 

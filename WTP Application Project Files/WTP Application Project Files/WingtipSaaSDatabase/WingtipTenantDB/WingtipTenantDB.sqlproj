@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="WingtipTenantDB.publish.xml" />
+    <None Include="SetupScripts\RowLevelSecurity.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\StoredProcedures\sp_CpuLoadGenerator.sql" />
