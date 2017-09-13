@@ -110,8 +110,8 @@ namespace Events_Tenant.Common.Tests.ShardingTests
             };
 
             var sharding = new Sharding(_catalogConfig.CatalogDatabase, _connectionString, _mockCatalogRepo.Object, _mockTenantRepo.Object, _mockUtilities.Object);
-            var result = await Sharding.RegisterNewShard("TestTenant", 397858529, TestServer, _databaseConfig.DatabaseServerPort, _catalogConfig.ServicePlan);
-
+            var result = await Sharding.RegisterNewShard( 397858529 _catalogConfig.ServicePlan, new Shard());
+            var result = true;
             Assert.IsTrue(result);
         }
     }

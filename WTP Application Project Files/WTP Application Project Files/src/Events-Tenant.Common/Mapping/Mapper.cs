@@ -19,7 +19,7 @@ namespace Events_Tenant.Common.Mapping
             {
                 ServicePlan = tenantEntity.ServicePlan,
                 TenantId = ConvertByteKeyIntoInt(tenantEntity.TenantId),
-                TenantName = tenantEntity.TenantName,
+                TenantName = tenantEntity.TenantName.ToLower().Replace(" ", ""),
                 TenantIdInString = tenantIdInString
             };
         }

@@ -47,7 +47,7 @@ namespace Events_TenantUserApp.Controllers
                     var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                     if (tenantDetails != null)
                     {
-                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
+                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
 
                         var eventDetails = await _tenantRepository.GetEvent(eventId, tenantDetails.TenantId);
 
@@ -93,7 +93,7 @@ namespace Events_TenantUserApp.Controllers
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
-                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
+                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
 
                     var sectionDetails = await _tenantRepository.GetSection(sectionId, tenantDetails.TenantId);
                     var totalNumberOfSeats = sectionDetails.SeatRows * sectionDetails.SeatsPerRow;
@@ -140,7 +140,7 @@ namespace Events_TenantUserApp.Controllers
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
-                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
+                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
 
                     var latestPurchaseTicketId = await _tenantRepository.GetNumberOfTicketPurchases(tenantDetails.TenantId);
                     ticketPurchaseModel.TicketPurchaseId = latestPurchaseTicketId + 1;

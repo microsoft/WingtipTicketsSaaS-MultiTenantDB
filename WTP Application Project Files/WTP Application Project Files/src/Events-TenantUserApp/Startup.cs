@@ -227,6 +227,7 @@ namespace Events_TenantUserApp
             TenantServerConfig = new TenantServerConfig
             {
                 TenantServer = Configuration["TenantServer"] + ".database.windows.net",
+                TenantDatabase = Configuration["TenantDatabase"],
                 ResetEventDates = Convert.ToBoolean(Configuration["ResetEventDates"])
             };
         }

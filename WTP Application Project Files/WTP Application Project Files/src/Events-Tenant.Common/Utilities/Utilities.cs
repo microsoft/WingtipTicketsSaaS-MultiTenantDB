@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Events_Tenant.Common.Interfaces;
 using Events_TenantUserApp.EF.TenantsDdEF6;
+using Microsoft.Azure.SqlDatabase.ElasticScale.ShardManagement;
 
 namespace Events_Tenant.Common.Utilities
 {
@@ -17,7 +18,7 @@ namespace Events_Tenant.Common.Utilities
     /// The Utilities class for doing common methods
     /// </summary>
     /// <seealso cref="Events_Tenant.Common.Interfaces.IUtilities" />
-    public class Utilities: IUtilities
+    public class Utilities : IUtilities
     {
         #region Public methods
 
@@ -41,10 +42,11 @@ namespace Events_Tenant.Common.Utilities
                 ConnectTimeout = databaseConfig.ConnectionTimeOut
             };
 
+            Shard shard = await Sharding.CreateNewShard(tenantServerConfig.TenantDatabase, tenantServerConfig.TenantServer, databaseConfig.DatabaseServerPort, catalogConfig.ServicePlan);
             foreach (var tenant in tenants)
             {
                 var tenantId = GetTenantKey(tenant);
-                var result = await Sharding.RegisterNewShard(tenant, tenantId, tenantServerConfig.TenantServer, databaseConfig.DatabaseServerPort, catalogConfig.ServicePlan);
+                var result = await Sharding.RegisterNewShard(tenantId, catalogConfig.ServicePlan, shard);
                 if (result)
                 {
                     // resets all tenants' event dates
@@ -99,19 +101,19 @@ namespace Events_Tenant.Common.Utilities
         {
             List<string> list = new List<string>();
 
-            string conString = $"Server={databaseConfig.SqlProtocol}:{tenantServerConfig.TenantServer},{databaseConfig.DatabaseServerPort};Database={""};User ID={databaseConfig.DatabaseUser};Password={databaseConfig.DatabasePassword};Trusted_Connection=False;Encrypt=True;Connection Timeout={databaseConfig.ConnectionTimeOut};";
+            string conString = $"Server={databaseConfig.SqlProtocol}:{tenantServerConfig.TenantServer},{databaseConfig.DatabaseServerPort};Database={tenantServerConfig.TenantDatabase};User ID={databaseConfig.DatabaseUser};Password={databaseConfig.DatabasePassword};Trusted_Connection=False;Encrypt=True;Connection Timeout={databaseConfig.ConnectionTimeOut};";
 
             using (SqlConnection con = new SqlConnection(conString))
             {
                 con.Open();
 
-                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases WHERE name NOT IN ('master')", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT VenueName from Venues", con))
                 {
                     using (IDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            list.Add(dr[0].ToString());
+                            list.Add(dr[0].ToString().ToLower().Replace(" ", ""));
                         }
                     }
                 }

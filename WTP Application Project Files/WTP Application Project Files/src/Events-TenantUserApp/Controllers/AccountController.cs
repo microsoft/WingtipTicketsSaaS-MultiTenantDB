@@ -53,7 +53,7 @@ namespace Events_TenantUserApp.Controllers
 
                     if (tenantDetails != null)
                     {
-                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
+                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
 
                         var customer = await _tenantRepository.GetCustomer(regEmail, tenantDetails.TenantId);
 
@@ -128,7 +128,7 @@ namespace Events_TenantUserApp.Controllers
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
-                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
+                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
 
                     //check if customer already exists
                     var customer = (_tenantRepository.GetCustomer(customerModel.Email, tenantDetails.TenantId)).Result;

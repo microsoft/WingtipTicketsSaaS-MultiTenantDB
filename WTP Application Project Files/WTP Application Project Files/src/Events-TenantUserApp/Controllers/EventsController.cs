@@ -39,7 +39,7 @@ namespace Events_TenantUserApp.Controllers
                     var tenantDetails = await _catalogRepository.GetTenant(tenant);
                     if (tenantDetails != null)
                     {
-                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
+                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
 
                         var events = await _tenantRepository.GetEventsForTenant(tenantDetails.TenantId);
                         return View(events);

@@ -33,7 +33,7 @@ namespace Events_Tenant.Common.Utilities
     public class TenantServerConfig
     {
         public string TenantServer { get; set; }
-
+        public string TenantDatabase { get; set; }
         /// <summary>
         /// Boolean value to specify if the events dates need to be reset
         /// This can be set to false when in Development mode

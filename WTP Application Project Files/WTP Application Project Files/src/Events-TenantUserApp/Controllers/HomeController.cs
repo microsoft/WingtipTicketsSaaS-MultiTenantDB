@@ -56,7 +56,6 @@ namespace Events_TenantUserApp.Controllers
                         if (venue != null)
                         {
                             tenant.VenueName = venue.VenueName;
-                            tenant.TenantName = venue.DatabaseName;
                         }
                     }
 

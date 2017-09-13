@@ -42,11 +42,11 @@ namespace Events_TenantUserApp.Controllers
             }
         }
 
-        protected void SetTenantConfig(int tenantId, string tenantIdInString)
+        protected void SetTenantConfig(int tenantId, string tenantIdInString, string tenantName)
         {
             var host = HttpContext.Request.Host.ToString();
 
-            var tenantConfig = PopulateTenantConfigs(tenantId, tenantIdInString, host);
+            var tenantConfig = PopulateTenantConfigs(tenantId, tenantIdInString, tenantName,host);
 
             if (tenantConfig != null)
             {
@@ -97,7 +97,7 @@ namespace Events_TenantUserApp.Controllers
         /// <param name="tenantIdInString">The tenant identifier in string.</param>
         /// <param name="host">The host.</param>
         /// <returns></returns>
-        private TenantConfig PopulateTenantConfigs(int tenantId, string tenantIdInString, string host)
+        private TenantConfig PopulateTenantConfigs(int tenantId, string tenantIdInString, string tenantName, string host)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace Events_TenantUserApp.Controllers
                     BlobImagePath = blobPath + venueTypeDetails.VenueType + "-user.jpg",
                     EventTypeNamePlural = venueTypeDetails.EventTypeShortNamePlural.ToUpper(),
                     TenantId = tenantId,
-                    TenantName = venueDetails.DatabaseName,
+                    TenantName = tenantName,
                     Currency = regionalInfo.CurrencySymbol,
                     TenantCulture =
                         (!string.IsNullOrEmpty(venueTypeDetails.Language)

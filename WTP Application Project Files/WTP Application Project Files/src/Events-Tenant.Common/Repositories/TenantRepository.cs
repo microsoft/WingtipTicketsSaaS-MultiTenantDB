@@ -216,7 +216,7 @@ namespace Events_Tenant.Common.Repositories
                     databaseName = sqlConn.Database;
                 }
 
-                var venue = await context.Venues.FirstOrDefaultAsync();
+                var venue = await context.Venues.Where(x => x.VenueId == tenantId).FirstOrDefaultAsync();
 
                 if (venue != null)
                 {
