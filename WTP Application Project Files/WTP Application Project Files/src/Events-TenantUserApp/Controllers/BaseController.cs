@@ -21,7 +21,7 @@ namespace Events_TenantUserApp.Controllers
         #endregion
 
         #region Constructors
-        public BaseController(IStringLocalizer<BaseController> localizer, ITenantRepository tenantRepository, IConfiguration configuration) 
+        public BaseController(IStringLocalizer<BaseController> localizer, ITenantRepository tenantRepository, IConfiguration configuration)
         {
             _localizer = localizer;
             _tenantRepository = tenantRepository;
@@ -42,11 +42,11 @@ namespace Events_TenantUserApp.Controllers
             }
         }
 
-        protected void SetTenantConfig(int tenantId, string tenantIdInString, string tenantName)
+        protected void SetTenantConfig(int tenantId, string tenantIdInString)
         {
             var host = HttpContext.Request.Host.ToString();
 
-            var tenantConfig = PopulateTenantConfigs(tenantId, tenantIdInString, tenantName,host);
+            var tenantConfig = PopulateTenantConfigs(tenantId, tenantIdInString, host);
 
             if (tenantConfig != null)
             {
@@ -97,7 +97,7 @@ namespace Events_TenantUserApp.Controllers
         /// <param name="tenantIdInString">The tenant identifier in string.</param>
         /// <param name="host">The host.</param>
         /// <returns></returns>
-        private TenantConfig PopulateTenantConfigs(int tenantId, string tenantIdInString, string tenantName, string host)
+        private TenantConfig PopulateTenantConfigs(int tenantId, string tenantIdInString, string host)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace Events_TenantUserApp.Controllers
                 }
                 else
                 {
-                    string[] hostpieces = host.Split(new[] {"."}, StringSplitOptions.RemoveEmptyEntries);
+                    string[] hostpieces = host.Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
                     user = hostpieces[2];
                 }
 
@@ -133,7 +133,7 @@ namespace Events_TenantUserApp.Controllers
                     BlobImagePath = blobPath + venueTypeDetails.VenueType + "-user.jpg",
                     EventTypeNamePlural = venueTypeDetails.EventTypeShortNamePlural.ToUpper(),
                     TenantId = tenantId,
-                    TenantName = tenantName,
+                    TenantName = venueDetails.VenueName.ToLower().Replace(" ", ""),
                     Currency = regionalInfo.CurrencySymbol,
                     TenantCulture =
                         (!string.IsNullOrEmpty(venueTypeDetails.Language)

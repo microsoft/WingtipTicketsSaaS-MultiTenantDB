@@ -5,7 +5,6 @@ using Events_Tenant.Common.Interfaces;
 using Events_Tenant.Common.Models;
 using Events_TenantUserApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace Events_TenantUserApp.Controllers
 {
     [Route("{tenant}/FindSeats")]
-    public class FindSeatsController: BaseController
+    public class FindSeatsController : BaseController
     {
         #region Private varibles
 
@@ -47,7 +46,7 @@ namespace Events_TenantUserApp.Controllers
                     var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                     if (tenantDetails != null)
                     {
-                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
+                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
 
                         var eventDetails = await _tenantRepository.GetEvent(eventId, tenantDetails.TenantId);
 
@@ -93,7 +92,7 @@ namespace Events_TenantUserApp.Controllers
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
-                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
+                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
 
                     var sectionDetails = await _tenantRepository.GetSection(sectionId, tenantDetails.TenantId);
                     var totalNumberOfSeats = sectionDetails.SeatRows * sectionDetails.SeatsPerRow;
@@ -140,7 +139,7 @@ namespace Events_TenantUserApp.Controllers
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
-                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
+                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
 
                     var latestPurchaseTicketId = await _tenantRepository.GetNumberOfTicketPurchases(tenantDetails.TenantId);
                     ticketPurchaseModel.TicketPurchaseId = latestPurchaseTicketId + 1;

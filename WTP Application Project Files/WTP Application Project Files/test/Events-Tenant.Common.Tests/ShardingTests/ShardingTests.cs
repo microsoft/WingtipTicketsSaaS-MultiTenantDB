@@ -13,7 +13,10 @@ namespace Events_Tenant.Common.Tests.ShardingTests
     {
         #region Private fields
 
+        //Use your local SQL Server instance name
         internal const string TestServer = @"localhost";
+        
+        //If your local instance does not support Windows Authentication change here for SQL Authentication
         internal const string ShardMapManagerTestConnectionString = "Data Source=" + TestServer + ";Integrated Security=True;";
 
         private const string CreateDatabaseQueryFormat =
@@ -28,7 +31,6 @@ namespace Events_Tenant.Common.Tests.ShardingTests
         private Mock<IUtilities> _mockUtilities;
 
         #endregion
-
 
         [TestInitialize]
         public void Setup()
@@ -53,7 +55,7 @@ namespace Events_Tenant.Common.Tests.ShardingTests
             var tenant = new Tenants
             {
                 ServicePlan = "Standard",
-                TenantName = "TestTenant",
+                TenantName = "Test Tenant 1",
                 TenantId = new byte[0]
             };
 
@@ -110,8 +112,12 @@ namespace Events_Tenant.Common.Tests.ShardingTests
             };
 
             var sharding = new Sharding(_catalogConfig.CatalogDatabase, _connectionString, _mockCatalogRepo.Object, _mockTenantRepo.Object, _mockUtilities.Object);
-            var result = await Sharding.RegisterNewShard( 397858529 _catalogConfig.ServicePlan, new Shard());
-            var result = true;
+            Assert.IsNotNull(sharding);
+
+            var shard = Sharding.CreateNewShard("Test Tenant 1", TestServer, _databaseConfig.DatabaseServerPort, _catalogConfig.ServicePlan);
+            Assert.IsNotNull(shard);
+
+            var result = await Sharding.RegisterNewShard(397858529, _catalogConfig.ServicePlan, shard);
             Assert.IsTrue(result);
         }
     }

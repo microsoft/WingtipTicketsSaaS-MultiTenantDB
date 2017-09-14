@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Globalization;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -42,7 +40,8 @@ namespace Events_Tenant.Common.Utilities
                 ConnectTimeout = databaseConfig.ConnectionTimeOut
             };
 
-            Shard shard = await Sharding.CreateNewShard(tenantServerConfig.TenantDatabase, tenantServerConfig.TenantServer, databaseConfig.DatabaseServerPort, catalogConfig.ServicePlan);
+            Shard shard = Sharding.CreateNewShard(tenantServerConfig.TenantDatabase, tenantServerConfig.TenantServer, databaseConfig.DatabaseServerPort, catalogConfig.ServicePlan);
+
             foreach (var tenant in tenants)
             {
                 var tenantId = GetTenantKey(tenant);

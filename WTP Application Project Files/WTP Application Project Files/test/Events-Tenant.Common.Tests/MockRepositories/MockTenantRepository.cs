@@ -13,7 +13,6 @@ namespace Events_Tenant.Common.Tests.MockRepositories
         private CustomerModel CustomerModel { get; set; }
         #endregion
 
-
         #region Public Properties
 
         public List<EventSectionModel> EventSectionModels { get; set; }
@@ -21,8 +20,8 @@ namespace Events_Tenant.Common.Tests.MockRepositories
         public List<TicketPurchaseModel> TicketPurchaseModels { get; set; }
         public List<TicketModel> TicketModels { get; set; }
         public List<EventModel> EventModels { get; set; }
+        public List<VenuesModel> VenueModels { get; set; }
         #endregion
-
 
         public MockTenantRepository()
         {
@@ -32,7 +31,7 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                 CountryCode = "USA",
                 CountryName = "United States"
             };
-            Countries = new List<CountryModel> {country};
+            Countries = new List<CountryModel> { country };
 
             EventSectionModels = new List<EventSectionModel>
             {
@@ -118,6 +117,27 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                 }
             };
 
+            VenueModels = new List<VenuesModel>
+            {
+                new VenuesModel
+                {
+                    CountryCode = "USA",
+                    VenueType = "pop",
+                    VenueName = "Venue 1",
+                    PostalCode = "123",
+                    AdminEmail = "popadmin@email.com",
+                    AdminPassword = "password"
+                },
+                new VenuesModel
+                {
+                    CountryCode = "USA",
+                    VenueType = "jazz",
+                    VenueName = "Venue 2",
+                    PostalCode = "321",
+                    AdminEmail = "jazzadmin@email.com",
+                    AdminPassword = "password"
+                }
+            };
         }
 
         public async Task<List<CountryModel>> GetAllCountries(int tenantId)
@@ -181,15 +201,7 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<VenuesModel> GetVenueDetails(int tenantId)
         {
-            return new VenuesModel
-            {
-                CountryCode = "USA",
-                VenueType = "pop",
-                VenueName = "Venue 1",
-                PostalCode = "123",
-                AdminEmail = "admin@email.com",
-                AdminPassword = "password"
-            };
+            return VenueModels[0];
         }
 
         public async Task<VenueTypeModel> GetVenueType(string venueType, int tenantId)

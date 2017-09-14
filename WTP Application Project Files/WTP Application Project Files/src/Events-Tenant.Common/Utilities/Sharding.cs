@@ -63,7 +63,7 @@ namespace Events_Tenant.Common.Utilities
             }
             catch (Exception exception)
             {
-               Trace.TraceError(exception.Message, "Error in sharding initialisation.");
+                Trace.TraceError(exception.Message, "Error in sharding initialisation.");
             }
 
         }
@@ -73,7 +73,6 @@ namespace Events_Tenant.Common.Utilities
         #region Public methods
 
         /// <summary>
-        /// Creates the new shard if not created previously.
         /// Verify if shard exists for the tenant. If not then create new shard
         /// </summary>
         /// <param name="tenantName">Name of the tenant.</param>
@@ -81,7 +80,7 @@ namespace Events_Tenant.Common.Utilities
         /// <param name="databaseServerPort">The database server port.</param>
         /// <param name="servicePlan">The service plan.</param>
         /// <returns></returns>
-        public static  async Task<Shard> CreateNewShard(string tenantName, string tenantServer, int databaseServerPort, string servicePlan)
+        public static Shard CreateNewShard(string tenantName, string tenantServer, int databaseServerPort, string servicePlan)
         {
             Shard shard;
             try
@@ -98,23 +97,21 @@ namespace Events_Tenant.Common.Utilities
                 Trace.TraceError(exception.Message, "Error in registering new shard.");
                 shard = null;
             }
-            return shard;;
+            return shard;
         }
 
         /// <summary>
-        /// Registers the new shard.
-        /// Verify if shard exists for the tenant. If not then register the shard add tenant details to Tenants table in catalog
+        /// Registers the new shard and add tenant details to Tenants table in catalog
         /// </summary>
-        /// <param name="tenantName">Name of the tenant.</param>
         /// <param name="tenantId">The tenant identifier.</param>
-        /// <param name="tenantServer">The tenant server.</param>
         /// <param name="databaseServerPort">The database server port.</param>
         /// <param name="servicePlan">The service plan.</param>
+        /// <param name="shard">The shard which needs to be registered.</param>
         /// <returns></returns>
-        public static async Task<bool> RegisterNewShard( int tenantId,  string servicePlan, Shard shard)
+        public static async Task<bool> RegisterNewShard(int tenantId, string servicePlan, Shard shard)
         {
             try
-            {   
+            {
                 // Register the mapping of the tenant to the shard in the shard map.
                 // After this step, DDR on the shard map can be used
                 PointMapping<int> mapping;
@@ -135,7 +132,7 @@ namespace Events_Tenant.Common.Utilities
                         TenantId = key,
                         TenantName = venueDetails.VenueName
                     };
-                    
+
                     _catalogRepository.Add(tenant);
                 }
                 return true;
@@ -145,8 +142,8 @@ namespace Events_Tenant.Common.Utilities
                 Trace.TraceError(exception.Message, "Error in registering new shard.");
                 return false;
             }
-
         }
+
         #endregion
 
     }

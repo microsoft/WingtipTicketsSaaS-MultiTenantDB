@@ -11,10 +11,9 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
     public class TenantRepositoryTests
     {
         private ITenantRepository _tenantRepository;
-        private  int _tenantId;
+        private int _tenantId;
         private int _numberOfTicketPurchases;
         private int _ticketsSold;
-
 
         [TestInitialize]
         public void Setup()
@@ -71,7 +70,6 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
             Assert.AreEqual("last name", result.LastName);
             Assert.AreEqual("first name", result.FirstName);
             Assert.AreEqual("pass", result.Password);
-
         }
 
         [TestMethod]
@@ -91,7 +89,6 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
             Assert.AreEqual(1, result[2].EventId);
             Assert.AreEqual(60, result[2].Price);
         }
-
 
         [TestMethod]
         public async void GetEventsForTenantTest()
@@ -137,7 +134,6 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
             Assert.AreEqual("section 2", result[1].SectionName);
             Assert.AreEqual(80, result[1].StandardPrice);
             Assert.AreEqual(5, result[1].SeatRows);
-
         }
 
         [TestMethod]

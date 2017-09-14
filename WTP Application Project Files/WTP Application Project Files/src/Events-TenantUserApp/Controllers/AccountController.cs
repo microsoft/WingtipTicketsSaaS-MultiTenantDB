@@ -31,7 +31,7 @@ namespace Events_TenantUserApp.Controllers
             _localizer = localizer;
             _tenantRepository = tenantRepository;
             _catalogRepository = catalogRepository;
-             _logger = logger;
+            _logger = logger;
         }
 
         #endregion
@@ -53,7 +53,7 @@ namespace Events_TenantUserApp.Controllers
 
                     if (tenantDetails != null)
                     {
-                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
+                        SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
 
                         var customer = await _tenantRepository.GetCustomer(regEmail, tenantDetails.TenantId);
 
@@ -111,7 +111,7 @@ namespace Events_TenantUserApp.Controllers
             {
                 _logger.LogError(0, ex, "Log out failed for tenant {tenant}", tenant);
             }
-            return RedirectToAction("Index", "Events", new {tenant});
+            return RedirectToAction("Index", "Events", new { tenant });
         }
 
         [HttpPost]
@@ -128,7 +128,7 @@ namespace Events_TenantUserApp.Controllers
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
-                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString, tenantDetails.TenantName);
+                    SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
 
                     //check if customer already exists
                     var customer = (_tenantRepository.GetCustomer(customerModel.Email, tenantDetails.TenantId)).Result;
@@ -165,7 +165,7 @@ namespace Events_TenantUserApp.Controllers
                     return View("TenantError", tenant);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(0, ex, "Registration failed for tenant {tenant}", tenant);
             }
