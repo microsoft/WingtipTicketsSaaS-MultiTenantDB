@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Events_Tenant.Common.Interfaces;
@@ -10,17 +11,13 @@ namespace Events_Tenant.Common.Tests.MockRepositories
     {
         #region Private Variables
         private List<CountryModel> Countries { get; set; }
-        private CustomerModel CustomerModel { get; set; }
-        #endregion
-
-        #region Public Properties
-
-        public List<EventSectionModel> EventSectionModels { get; set; }
-        public List<SectionModel> SectionModels { get; set; }
-        public List<TicketPurchaseModel> TicketPurchaseModels { get; set; }
-        public List<TicketModel> TicketModels { get; set; }
-        public List<EventModel> EventModels { get; set; }
-        public List<VenuesModel> VenueModels { get; set; }
+        private List<CustomerModel> CustomerModels { get; set; }
+        private List<EventSectionModel> EventSectionModels { get; set; }
+        private List<SectionModel> SectionModels { get; set; }
+        private List<TicketPurchaseModel> TicketPurchaseModels { get; set; }
+        private List<TicketModel> TicketModels { get; set; }
+        private List<EventModel> EventModels { get; set; }
+        private List<VenuesModel> VenuesModels { get; set; }
         #endregion
 
         public MockTenantRepository()
@@ -33,25 +30,51 @@ namespace Events_Tenant.Common.Tests.MockRepositories
             };
             Countries = new List<CountryModel> { country };
 
+            CustomerModels = new List<CustomerModel>();
+
             EventSectionModels = new List<EventSectionModel>
             {
                 new EventSectionModel
                 {
                     SectionId = 1,
                     EventId = 1,
-                    Price = 100
+                    Price = 100,
+                    VenueId = -1929398168
                 },
                 new EventSectionModel
                 {
                     SectionId = 2,
                     EventId = 1,
-                    Price = 80
+                    Price = 80,
+                    VenueId = -1929398168
                 },
                 new EventSectionModel
                 {
                     SectionId = 3,
                     EventId = 1,
-                    Price = 60
+                    Price = 60,
+                    VenueId = -1929398168
+                },
+                new EventSectionModel
+                {
+                    SectionId = 1,
+                    EventId = 1,
+                    Price = 100,
+                    VenueId = 1032943028
+                },
+                new EventSectionModel
+                {
+                    SectionId = 2,
+                    EventId = 1,
+                    Price = 80,
+                    VenueId = 1032943028
+                },
+                new EventSectionModel
+                {
+                    SectionId = 3,
+                    EventId = 1,
+                    Price = 60,
+                    VenueId = 1032943028
                 }
             };
 
@@ -63,7 +86,8 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                     SeatsPerRow = 10,
                     SectionName = "section 1",
                     StandardPrice = 100,
-                    SeatRows = 4
+                    SeatRows = 4,
+                    VenueId = -1929398168
                 },
                 new SectionModel
                 {
@@ -71,7 +95,26 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                     SeatsPerRow = 20,
                     SectionName = "section 2",
                     StandardPrice = 80,
-                    SeatRows = 5
+                    SeatRows = 5,
+                    VenueId = -1929398168
+                },
+                new SectionModel
+                {
+                    SectionId = 1,
+                    SeatsPerRow = 10,
+                    SectionName = "section 1",
+                    StandardPrice = 100,
+                    SeatRows = 4,
+                    VenueId = 1032943028
+                },
+                new SectionModel
+                {
+                    SectionId = 2,
+                    SeatsPerRow = 20,
+                    SectionName = "section 2",
+                    StandardPrice = 80,
+                    SeatRows = 5,
+                    VenueId = 1032943028
                 }
             };
 
@@ -82,7 +125,16 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                     CustomerId = 1,
                     PurchaseTotal = 2,
                     TicketPurchaseId = 5,
-                    PurchaseDate = DateTime.Now
+                    PurchaseDate = DateTime.Now,
+                    VenueId = -1929398168
+                },
+                new TicketPurchaseModel
+                {
+                    CustomerId = 1,
+                    PurchaseTotal = 2,
+                    TicketPurchaseId = 5,
+                    PurchaseDate = DateTime.Now,
+                    VenueId = 1032943028
                 }
             };
 
@@ -95,7 +147,18 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                     TicketPurchaseId = 12,
                     SeatNumber = 50,
                     RowNumber = 2,
-                    TicketId = 2
+                    TicketId = 2,
+                    VenueId = -1929398168
+                },
+                new TicketModel
+                {
+                    SectionId = 1,
+                    EventId = 1,
+                    TicketPurchaseId = 12,
+                    SeatNumber = 50,
+                    RowNumber = 2,
+                    TicketId = 2,
+                    VenueId = 1032943028
                 }
             };
 
@@ -106,36 +169,56 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                     EventId = 1,
                     EventName = "Event 1",
                     Date = DateTime.Now,
-                    SubTitle = "Event 1 Subtitle"
+                    SubTitle = "Event 1 Subtitle",
+                    VenueId = -1929398168
                 },
                 new EventModel
                 {
                     EventId = 2,
                     EventName = "Event 2",
                     Date = DateTime.Now,
-                    SubTitle = "Event 2 Subtitle"
+                    SubTitle = "Event 2 Subtitle",
+                    VenueId = -1929398168
+                },
+                new EventModel
+                {
+                    EventId = 1,
+                    EventName = "Event 1",
+                    Date = DateTime.Now,
+                    SubTitle = "Event 1 Subtitle",
+                    VenueId = 1032943028
+                },
+                new EventModel
+                {
+                    EventId = 2,
+                    EventName = "Event 2",
+                    Date = DateTime.Now,
+                    SubTitle = "Event 2 Subtitle",
+                    VenueId = 1032943028
                 }
             };
 
-            VenueModels = new List<VenuesModel>
+            VenuesModels = new List<VenuesModel>
             {
                 new VenuesModel
                 {
                     CountryCode = "USA",
                     VenueType = "pop",
-                    VenueName = "Venue 1",
+                    VenueName = "Test Tenant 1",
                     PostalCode = "123",
                     AdminEmail = "popadmin@email.com",
-                    AdminPassword = "password"
+                    AdminPassword = "password",
+                    VenueId = -1929398168
                 },
                 new VenuesModel
                 {
                     CountryCode = "USA",
                     VenueType = "jazz",
-                    VenueName = "Venue 2",
+                    VenueName = "Test Tenant 2",
                     PostalCode = "321",
                     AdminEmail = "jazzadmin@email.com",
-                    AdminPassword = "password"
+                    AdminPassword = "password",
+                    VenueId = 1032943028
                 }
             };
         }
@@ -147,61 +230,63 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<CountryModel> GetCountry(string countryCode, int tenantId)
         {
-            return Countries[0];
+            return Countries.Where(i => i.CountryCode.Equals(countryCode)).FirstOrDefault();
         }
 
         public async Task<int> AddCustomer(CustomerModel customerModel, int tenantId)
         {
-            CustomerModel = customerModel;
-            return 123;
+            customerModel.VenueId = tenantId;
+            CustomerModels.Add(customerModel);
+            return customerModel.CustomerId;
         }
 
         public async Task<CustomerModel> GetCustomer(string email, int tenantId)
         {
-            return CustomerModel;
+            return CustomerModels.Where(i => i.Email.Equals(email)).FirstOrDefault();
         }
-
 
         public async Task<List<EventSectionModel>> GetEventSections(int eventId, int tenantId)
         {
-            return EventSectionModels;
+            return EventSectionModels.Where(i => i.EventId == eventId && i.VenueId == tenantId).ToList();
         }
 
         public async Task<List<SectionModel>> GetSections(List<int> sectionIds, int tenantId)
         {
-            return SectionModels;
+            return SectionModels.Where(i => sectionIds.Contains(i.SectionId) && i.VenueId == tenantId).ToList();
         }
 
         public async Task<SectionModel> GetSection(int sectionId, int tenantId)
         {
-            return SectionModels[0];
+            return SectionModels.Where(i => i.VenueId == tenantId).FirstOrDefault();
         }
 
         public async Task<int> AddTicketPurchase(TicketPurchaseModel ticketPurchaseModel, int tenantId)
         {
+            ticketPurchaseModel.VenueId = tenantId;
             TicketPurchaseModels.Add(ticketPurchaseModel);
             return ticketPurchaseModel.TicketPurchaseId;
         }
 
         public async Task<int> GetNumberOfTicketPurchases(int tenantId)
         {
-            return TicketPurchaseModels.Count;
+            return TicketPurchaseModels.Where(i => i.VenueId == tenantId).Count();
         }
 
         public async Task<bool> AddTicket(TicketModel ticketModel, int tenantId)
         {
+            ticketModel.VenueId = tenantId;
             TicketModels.Add(ticketModel);
             return true;
         }
 
         public async Task<int> GetTicketsSold(int sectionId, int eventId, int tenantId)
         {
-            return TicketModels.Count;
+            return TicketModels.Where(i => i.VenueId == tenantId).Count();
         }
 
         public async Task<VenuesModel> GetVenueDetails(int tenantId)
         {
-            return VenueModels[0];
+            return VenuesModels.Where(i => i.VenueId == tenantId).FirstOrDefault();
         }
 
         public async Task<VenueTypeModel> GetVenueType(string venueType, int tenantId)
@@ -219,12 +304,12 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<List<EventModel>> GetEventsForTenant(int tenantId)
         {
-            return EventModels;
+            return EventModels.Where(i => i.VenueId == tenantId).ToList();
         }
 
         public async Task<EventModel> GetEvent(int eventId, int tenantId)
         {
-            return EventModels[0];
+            return EventModels.Where(i => i.EventId == eventId && i.VenueId == tenantId).FirstOrDefault();
         }
 
     }

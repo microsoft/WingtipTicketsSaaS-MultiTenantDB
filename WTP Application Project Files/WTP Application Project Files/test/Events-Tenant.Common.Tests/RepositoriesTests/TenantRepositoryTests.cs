@@ -19,7 +19,7 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
         public void Setup()
         {
             _tenantRepository = new MockTenantRepository();
-            _tenantId = 1368421345;
+            _tenantId = -1929398168;
             _numberOfTicketPurchases = 1;
             _ticketsSold = 1;
 
@@ -211,7 +211,7 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
             Assert.IsNotNull(result);
             Assert.AreEqual("USA", result.CountryCode);
             Assert.AreEqual("pop", result.VenueType);
-            Assert.AreEqual("Venue 1", result.VenueName);
+            Assert.AreEqual("Test Tenant 1", result.VenueName);
             Assert.AreEqual("123", result.PostalCode);
             Assert.AreEqual("admin@email.com", result.AdminEmail);
             Assert.AreEqual("password", result.AdminPassword);
