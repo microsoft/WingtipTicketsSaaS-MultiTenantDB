@@ -25,9 +25,9 @@ To deploy the app to Azure, click the link below.  Deploy the app in a new resou
 </a>
 
 
-After deployment completes, launch the app by browsing to ```http://events.wtp.USER.trafficmanager.net```, substituting *USER* with the value you set during deployment. 
+After deployment completes, launch the app by browsing to ```http://events.wtp-mt.USER.trafficmanager.net```, substituting *USER* with the value you set during deployment. 
 
-**IMPORTANT:** If you download and extract the repo or [Learning Modules](https://github.com/Microsoft/WingtipSaaS/tree/master/Learning%20Modules) from a zip file, make sure you unblock the .zip file before extracting. Executable contents (scripts, dlls) may be blocked by Windows when zip files are downloaded from an external source and extracted.
+**IMPORTANT:** If you download and extract the repo or [Learning Modules](https://github.com/Microsoft/WingtipSaaS-MT/tree/master/Learning%20Modules) from a zip file, make sure you unblock the .zip file before extracting. Executable contents (scripts, dlls) may be blocked by Windows when zip files are downloaded from an external source and extracted.
 
 To avoid scripts from being blocked by Windows:
 
@@ -36,7 +36,7 @@ To avoid scripts from being blocked by Windows:
 
 
 ## License
-Microsoft Wingtip SaaS sample application and tutorials are licensed under the MIT license. See the [LICENSE](https://github.com/Microsoft/WingtipSaaS/blob/master/license) file for more details.
+Microsoft Wingtip SaaS sample application and tutorials are licensed under the MIT license. See the [LICENSE](https://github.com/Microsoft/WingtipSaaS-MT/blob/master/license) file for more details.
 
 # Contributing
 
