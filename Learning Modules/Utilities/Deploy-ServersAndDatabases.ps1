@@ -236,4 +236,14 @@ foreach($tenantName in $tenantNames)
         -TenantName $tenantName
 }
 
-Write-Output 'Complete'
+# reset event dates for all venues
+
+$command = "EXEC sp_ResetEventDates"
+
+Invoke-SqlAzureWithRetry `
+    -Username $config.TenantAdminUserName -Password $config.TenantAdminPassword `
+    -ServerInstance $tenantsServerFullyQualifiedName `
+    -Database $tenantsDatabase.DatabaseName `
+    -Query $command
+
+Write-Output 'Initial server and database deployment complete'

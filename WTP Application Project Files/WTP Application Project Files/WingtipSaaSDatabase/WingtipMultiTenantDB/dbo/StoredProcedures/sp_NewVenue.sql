@@ -1,5 +1,4 @@
-﻿-- Creates a new Venue plus a default sections and events 
-
+﻿-- Creates a new venue with a set of default sections and events
 CREATE PROCEDURE [dbo].[sp_NewVenue]
     @VenueId  INT,
     @VenueName NVARCHAR(128),
@@ -19,6 +18,9 @@ AS
         RETURN 1
     END
 
+    DECLARE @StartHour int = 19
+    DECLARE @StartMinute int = 00
+    DECLARE @BaseDate datetime = DATETIMEFROMPARTS(YEAR(CURRENT_TIMESTAMP),MONTH(CURRENT_TIMESTAMP),DAY(CURRENT_TIMESTAMP),@StartHour,@StartMinute,00,000)
 
     -- Insert Venue
     INSERT INTO [dbo].Venues
@@ -36,17 +38,17 @@ AS
         (@VenueId,2,'Section 2');
     SET IDENTITY_INSERT [dbo].[Sections] OFF
     
-    -- Insert default Events
+    -- Insert default Events with dates distributed around current date
     SET IDENTITY_INSERT [dbo].[Events] ON;
 
     INSERT INTO [dbo].[Events]
         ([VenueId],[EventId],[EventName],[Subtitle],[Date])     
     VALUES
-        (@VenueId,1,'Event 1','Performer 1','2017-02-11 20:00:00'),
-        (@VenueId,2,'Event 2','Performer 2','2017-02-12 20:00:00'),
-        (@VenueId,3,'Event 3','Performer 3','2017-02-13 20:00:00'),
-        (@VenueId,4,'Event 4','Performer 4','2017-02-14 20:00:00'),
-        (@VenueId,5,'Event 5','Performer 5','2017-02-14 20:00:00');
+        (@VenueId,1,'Event 1','Performer 1',DATEADD(Day,-5,@BaseDate)),
+        (@VenueId,2,'Event 2','Performer 2',DATEADD(Day,-2,@BaseDate)),
+        (@VenueId,3,'Event 3','Performer 3',DATEADD(Day,1,@BaseDate)),
+        (@VenueId,4,'Event 4','Performer 4',DATEADD(Day,4,@BaseDate)),
+        (@VenueId,5,'Event 5','Performer 5',DATEADD(Day,7,@BaseDate));
 
     SET IDENTITY_INSERT [dbo].[Events] OFF
 
