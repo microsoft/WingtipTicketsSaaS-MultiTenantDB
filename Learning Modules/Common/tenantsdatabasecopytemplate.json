@@ -14,9 +14,9 @@
     "sourceDatabaseId": {
       "type": "string"
     },
-    "elasticPoolName": {
+    "serviceLevelObjective": {
       "type": "string"
-    }
+    }    
   },
   "resources": [
     {
@@ -26,7 +26,7 @@
       "properties": {
         "createMode": "Copy",
         "sourceDatabaseId": "[parameters('sourceDatabaseId')]",
-        "elasticPoolName": "[parameters('elasticPoolName')]"
+        "serviceLevelObjective": "[parameters('serviceLevelObjective')]"
       },
       "type": "Microsoft.Sql/servers/databases"
     }
