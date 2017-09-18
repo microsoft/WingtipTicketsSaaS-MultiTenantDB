@@ -1,5 +1,5 @@
 ﻿CREATE VIEW [dbo].[EventFacts] AS
-SELECT      v.VenueId, v.VenueName, v.VenueType,v.PostalCode as VenuePostalCode,  
+SELECT      v.VenueId, v.VenueName, v.VenueType,v.PostalCode as VenuePostalCode, CountryCode AS VenueCountryCode,
             (SELECT SUM (SeatRows * SeatsPerRow) FROM [dbo].[Sections] WHERE VenueId = v.VenueId) AS VenueCapacity,
             v.RowVersion AS VenueRowVersion,
             e.EventId, e.EventName, e.Subtitle AS EventSubtitle, e.Date AS EventDate,
