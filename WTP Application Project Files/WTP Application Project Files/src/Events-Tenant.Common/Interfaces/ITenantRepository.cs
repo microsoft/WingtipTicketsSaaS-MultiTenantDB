@@ -49,7 +49,7 @@ namespace Events_Tenant.Common.Interfaces
 
         #region Tickets
 
-        Task<bool> AddTicket(TicketModel ticketModel, int tenantId);
+        Task<bool> AddTicket(TicketModel[] ticketModel, int tenantId);
         Task<int> GetTicketsSold(int sectionId, int eventId, int tenantId);
 
         #endregion

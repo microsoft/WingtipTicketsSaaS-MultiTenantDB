@@ -146,21 +146,19 @@ namespace Events_TenantUserApp.Controllers
 
                     var purchaseTicketId = await _tenantRepository.AddTicketPurchase(ticketPurchaseModel, tenantDetails.TenantId);
 
-                    var ticketModel = new TicketModel
-                    {
-                        SectionId = Convert.ToInt32(sectionId),
-                        EventId = Convert.ToInt32(eventId),
-                        TicketPurchaseId = purchaseTicketId
-                    };
-
+                    var ticketModel = new TicketModel[numberOfTickets];
                     Random rnd = new Random();
                     for (var i = 0; i < numberOfTickets; i++)
                     {
+                        ticketModel[i] = new TicketModel();
+                        ticketModel[i].SectionId = Convert.ToInt32(sectionId);
+                        ticketModel[i].EventId = Convert.ToInt32(eventId);
+                        ticketModel[i].TicketPurchaseId = purchaseTicketId;
                         Random rnd2 = new Random(5000);
-                        ticketModel.RowNumber = rnd.Next(0, 100000);
-                        ticketModel.SeatNumber = rnd2.Next(0, 100000);
-                        purchaseResult = await _tenantRepository.AddTicket(ticketModel, tenantDetails.TenantId);
+                        ticketModel[i].RowNumber = rnd.Next(0, 100000);
+                        ticketModel[i].SeatNumber = rnd2.Next(0, 100000);
                     }
+                    purchaseResult = await _tenantRepository.AddTicket(ticketModel, tenantDetails.TenantId);
 
                     if (purchaseResult)
                     {
