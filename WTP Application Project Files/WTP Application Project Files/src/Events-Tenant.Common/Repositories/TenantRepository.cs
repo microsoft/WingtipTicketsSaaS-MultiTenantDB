@@ -72,7 +72,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var customer = await context.Customers.Where(i => i.Email == email).FirstOrDefaultAsync();
+                var customer = await context.Customers.Where(i => i.Email == email && i.VenueId == tenantId).FirstOrDefaultAsync();
 
                 return customer?.ToCustomerModel();
             }
