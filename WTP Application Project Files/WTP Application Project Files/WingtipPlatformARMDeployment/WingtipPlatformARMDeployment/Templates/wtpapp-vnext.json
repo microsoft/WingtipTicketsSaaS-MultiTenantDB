@@ -12,15 +12,10 @@
   "variables": {
     "lowerCaseUser": "[toLower(parameters('user'))]",
     "location": "[resourceGroup().location]",
-    "elasticPoolEdition": "Standard",
-    "elasticPoolName": "Pool1",
-    "elasticPoolDtu": "50",
-    "databaseDtuMin": "0",
-    "databaseDtuMax": "50",
     "administratorLogin": "developer",
     "administratorLoginPassword": "P@ssword1",
     "webAppSku": "Standard",
-    "sqlRequestedServiceObjectiveName": "S1",
+    "sqlRequestedServiceObjectiveName": "S2",
     "sqlCollation": "SQL_Latin1_General_CP1_CI_AS",
     "sqlEdition": "Standard",
     "catalogServerName": "catalog",
@@ -75,23 +70,7 @@
         },
         {
           "dependsOn": [
-            "[concat('Microsoft.Sql/servers/',variables('tenantServer'))]"
-          ],
-          "name": "[variables('elasticPoolName')]",
-          "location": "[variables('location')]",
-          "type": "elasticpools",
-          "apiVersion": "2014-04-01-preview",
-          "properties": {
-            "edition": "[variables('elasticPoolEdition')]",
-            "dtu": "[variables('elasticPoolDtu')]",
-            "databaseDtuMin": "[variables('databaseDtuMin')]",
-            "databaseDtuMax": "[variables('databaseDtuMax')]"
-          }
-        },
-        {
-          "dependsOn": [
             "[concat('Microsoft.Sql/servers/',variables('tenantServer'))]",
-            "[concat('Microsoft.Sql/servers/',variables('tenantServer'),'/elasticpools/',variables('elasticPoolName'))]",
             "[concat('Microsoft.Sql/servers/',variables('tenantServer'),'/firewallrules/AllowAllAzureIps')]",
             "[concat('Microsoft.Sql/servers/',variables('tenantServer'),'/firewallrules/Open')]"
           ],
@@ -100,8 +79,7 @@
           "type": "databases",
           "apiVersion": "2014-04-01-preview",
           "properties": {
-            "requestedServiceObjectiveName": "ElasticPool",
-            "elasticPoolName": "[variables('elasticPoolName')]"
+            "requestedServiceObjectiveName": "[variables('sqlRequestedServiceObjectiveName')]"
           },
           "resources": [
             {
@@ -222,6 +200,7 @@
                 "storageKey": "?",
                 "storageUri": "[variables('baseTenantDatabaseStorageUri')]",
                 "administratorLogin": "[concat(variables('administratorLogin'),'@',variables('catalogServer'))]",
+
                 "administratorLoginPassword": "[variables('administratorLoginPassword')]",
                 "operationMode": "Import"
               }
