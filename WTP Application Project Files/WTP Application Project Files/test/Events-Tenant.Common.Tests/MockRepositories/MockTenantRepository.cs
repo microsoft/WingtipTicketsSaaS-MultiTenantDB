@@ -272,10 +272,13 @@ namespace Events_Tenant.Common.Tests.MockRepositories
             return TicketPurchaseModels.Where(i => i.VenueId == tenantId).Count();
         }
 
-        public async Task<bool> AddTicket(TicketModel ticketModel, int tenantId)
+        public async Task<bool> AddTicket(List<TicketModel> ticketModel, int tenantId)
         {
-            ticketModel.VenueId = tenantId;
-            TicketModels.Add(ticketModel);
+            foreach (TicketModel tkt in ticketModel)
+            {
+                tkt.VenueId = tenantId;
+                TicketModels.Add(tkt);
+            }
             return true;
         }
 

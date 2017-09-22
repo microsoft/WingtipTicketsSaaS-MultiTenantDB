@@ -178,7 +178,8 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
         [TestMethod]
         public async void AddTicketTest()
         {
-            var ticketModel = new TicketModel
+            var ticketModel = new List<TicketModel>();
+            ticketModel.Add(new TicketModel
             {
                 SectionId = 2,
                 EventId = 4,
@@ -186,7 +187,7 @@ namespace Events_Tenant.Common.Tests.RepositoriesTests
                 SeatNumber = 41,
                 RowNumber = 22,
                 TicketId = 100
-            };
+            });
 
             var result = await _tenantRepository.AddTicket(ticketModel, _tenantId);
             _ticketsSold++;

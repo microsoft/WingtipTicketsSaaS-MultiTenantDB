@@ -176,7 +176,7 @@ namespace Events_Tenant.Common.Repositories
 
         #region Tickets
 
-        public async Task<bool> AddTicket(TicketModel[] ticketModel, int tenantId)
+        public async Task<bool> AddTicket(List<TicketModel> ticketModel, int tenantId)
         {
             using (var context = CreateContext(tenantId))
             {

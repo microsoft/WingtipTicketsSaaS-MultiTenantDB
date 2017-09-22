@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace Events_TenantUserApp.Controllers
 {
@@ -146,17 +147,18 @@ namespace Events_TenantUserApp.Controllers
 
                     var purchaseTicketId = await _tenantRepository.AddTicketPurchase(ticketPurchaseModel, tenantDetails.TenantId);
 
-                    var ticketModel = new TicketModel[numberOfTickets];
+                    var ticketModel = new List<TicketModel>();
                     Random rnd = new Random();
                     for (var i = 0; i < numberOfTickets; i++)
                     {
-                        ticketModel[i] = new TicketModel();
-                        ticketModel[i].SectionId = Convert.ToInt32(sectionId);
-                        ticketModel[i].EventId = Convert.ToInt32(eventId);
-                        ticketModel[i].TicketPurchaseId = purchaseTicketId;
                         Random rnd2 = new Random(5000);
-                        ticketModel[i].RowNumber = rnd.Next(0, 100000);
-                        ticketModel[i].SeatNumber = rnd2.Next(0, 100000);
+                        ticketModel.Add(new TicketModel{
+                             SectionId = Convert.ToInt32(sectionId),
+                             EventId = Convert.ToInt32(eventId),
+                             TicketPurchaseId = purchaseTicketId,
+                             RowNumber = rnd.Next(0, 100000),
+                             SeatNumber = rnd2.Next(0, 100000)
+                        });
                     }
                     purchaseResult = await _tenantRepository.AddTicket(ticketModel, tenantDetails.TenantId);
 
