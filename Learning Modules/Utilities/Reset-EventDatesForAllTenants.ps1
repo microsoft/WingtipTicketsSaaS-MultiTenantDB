@@ -29,14 +29,10 @@ $commandText = "EXEC sp_ResetEventDates"
 foreach ($dbLocation in $databaseLocations)
 { 
     Write-Output "Resetting event dates for '$($dblocation.Location.Database)'."
-    Invoke-Sqlcmd `
+    Invoke-SqlcmdWithRetry `
         -ServerInstance $($dbLocation.Location.Server) `
         -Username $($config.TenantAdminuserName) `
         -Password $($config.TenantAdminPassword) `
         -Database $($dblocation.Location.Database) `
-        -Query $commandText `
-        -ConnectionTimeout 30 `
-        -QueryTimeout 30 `
-        -EncryptConnection
-
+        -Query $commandText
 }

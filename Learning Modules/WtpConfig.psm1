@@ -3,49 +3,24 @@
 
 <#
 .SYNOPSIS
-    Returns default configuration values that will be used by the Wingtip Tickets Platform application
+    Returns default configuration values that will be used by the Wingtip SaaS application
 #>
 function Get-Configuration
 {
     $configuration = @{`
-        TemplatesLocationUrl = "https://wingtipsaas.blob.core.windows.net/templates"
-        TenantDatabaseTemplate = "tenantdatabasetemplate.json"
-        TenantDatabaseCopyTemplate = "tenantdatabasecopytemplate.json"
-        TenantDatabaseBatchTemplate = "tenantdatabasebatchtemplate.json"
-        TenantDatabaseCopyBatchTemplate = "tenantdatabasecopybatchtemplate.json"
-        WebApplicationTemplate = "webapplicationtemplate.json"
-        LogAnalyticsWorkspaceTemplate = "loganalyticsworkspacetemplate.json"
-        LogAnalyticsWorkspaceNameStem = "wtploganalytics-"
-        LogAnalyticsDeploymentLocation = "westcentralus"
-        DatabaseAndBacpacTemplate = "databaseandbacpactemplate.json"
-        TenantBacpacUrl = "https://wingtipsaas.blob.core.windows.net/bacpacs/wingtiptenantdb.bacpac"
-        GoldenTenantDatabaseName = "baseTenantDB"
+        TemplatesLocationUrl = "https://wingtipsaas.blob.core.windows.net/templates-mt"
+        GoldenTenantsDatabaseName = "basetenantdb"
         CatalogDatabaseName = "tenantcatalog"
-        CatalogServerNameStem = "catalog-"
-        TenantServerNameStem = "tenants1-"
-        TenantPoolNameStem = "Pool"
+        CatalogServerNameStem = "catalog-mt-"
+        TenantsServerNameStem = "tenants1-mt-"
+        TenantsDatabaseName = "tenants1"
+        TenantsDatabaseServiceObjective = "S0"
+        TenantsDatabaseCopyTemplate = "tenantsdatabasecopytemplate.json"
         CatalogShardMapName = "tenantcatalog"
         CatalogAdminUserName = "developer"
         CatalogAdminPassword = "P@ssword1"
         TenantAdminUserName = "developer"
-        TenantAdminPassword = "P@ssword1"
-        CatalogManagementAppNameStem = "catalogmanagement-"
-        CatalogManagementAppSku = "standard"
-        CatalogManagementAppSkuCode = "S1"
-        CatalogManagementAppWorkerSize = 0
-        ServicePrincipalPassword = "P@ssword1"
-        JobAccount = "jobaccount"
-        JobAccountDatabaseName = "jobaccount"
-        JobAccountDatabaseServiceObjective = "S2"
-        JobAccountCredentialName = "mydemocred"
-        TenantAnalyticsDatabaseName = "tenantanalytics"
-        TenantAnalyticsCSDatabaseName = "tenantanalytics-cs"
-        TenantAnalyticsDWDatabaseName = "tenantanalytics-dw"
-        AdhocAnalyticsDatabaseName = "adhocanalytics"
-        AdhocAnalyticsDatabaseServiceObjective = "S0"
-        AdhocAnalyticsBacpacUrl = "https://wtpdeploystorageaccount.blob.core.windows.net/wingtip-bacpacsvold/adhoctenantanalytics.bacpac"
-        SearchDatabaseName = "tenantsearch"  
-        SearchDatabaseServiceObjective = "S0"              
+        TenantAdminPassword = "P@ssword1"             
         StorageKeyType = "SharedAccessKey"
         StorageAccessKey = (ConvertTo-SecureString -String "?" -AsPlainText -Force)
         DefaultVenueType = "multipurpose"
