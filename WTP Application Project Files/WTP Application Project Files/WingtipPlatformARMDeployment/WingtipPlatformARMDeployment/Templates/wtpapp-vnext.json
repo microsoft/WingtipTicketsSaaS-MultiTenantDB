@@ -15,15 +15,16 @@
     "administratorLogin": "developer",
     "administratorLoginPassword": "P@ssword1",
     "webAppSku": "Standard",
-    "sqlRequestedServiceObjectiveName": "S2",
+    "sqlCatalogServiceObjectiveName": "S0",
+    "sqlTenantServiceObjectiveName": "S2",
     "sqlCollation": "SQL_Latin1_General_CP1_CI_AS",
     "sqlEdition": "Standard",
     "eventsAppSuffix": "mt",
     "catalogServerName": "[concat('catalog','-',variables('eventsAppSuffix'))]",
-    "catalogDatabaseName": "catalogdb",
+    "catalogDatabaseName": "tenantcatalog",
     "catalogServer": "[concat(variables('catalogServerName'),'-', variables('lowerCaseUser'))]",
     "baseTenantDB": "basetenantdb",
-    "tenantServerName": "[concat('tenants','-',variables('eventsAppSuffix'),'1')]",
+    "tenantServerName": "[concat('tenants1','-',variables('eventsAppSuffix'))]",
     "tenantDatabaseName": "tenants1",
     "tenantServer": "[concat(variables('tenantservername'),'-',variables('lowerCaseUser'))]",
     "tenantDatabaseStorageUri": "[concat('https://wingtipsaas.blob.core.windows.net/bacpacs-mt/',variables('tenantDatabaseName'),'.bacpac')]",
@@ -80,7 +81,7 @@
           "type": "databases",
           "apiVersion": "2014-04-01-preview",
           "properties": {
-            "requestedServiceObjectiveName": "[variables('sqlRequestedServiceObjectiveName')]"
+            "requestedServiceObjectiveName": "[variables('sqlTenantServiceObjectiveName')]"
           },
           "resources": [
             {
@@ -152,7 +153,7 @@
             "collation": "[variables('sqlCollation')]",
             "edition": "[variables('sqlEdition')]",
             "maxSizeBytes": "1073741824",
-            "requestedServiceObjectiveName": "[variables('sqlRequestedServiceObjectiveName')]"
+            "requestedServiceObjectiveName": "[variables('sqlCatalogServiceObjectiveName')]"
           },
           "resources": [
             {
@@ -186,7 +187,7 @@
             "collation": "[variables('sqlCollation')]",
             "edition": "[variables('sqlEdition')]",
             "maxSizeBytes": "1073741824",
-            "requestedServiceObjectiveName": "[variables('sqlRequestedServiceObjectiveName')]"
+            "requestedServiceObjectiveName": "[variables('sqlCatalogServiceObjectiveName')]"
           },
           "resources": [
             {
