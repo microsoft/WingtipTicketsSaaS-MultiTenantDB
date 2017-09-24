@@ -61,19 +61,13 @@ function Add-ExtendedTenantMetaDataToCatalog
 
 <#
 .SYNOPSIS
-    Registers a tenant database in the catalog, including adding the tenant name as extended tenant meta data.
+    Registers a tenant database in the catalog
 #>
 function Add-TenantDatabaseToCatalog
 {
     param(
         [parameter(Mandatory=$true)]
         [object]$Catalog,
-
-        [parameter(Mandatory=$true)]
-        [string]$TenantName,
-
-        [parameter(Mandatory=$true)]
-        [int32]$TenantKey,
 
         [parameter(Mandatory=$true)]
         [string]$ServerName,
@@ -89,13 +83,6 @@ function Add-TenantDatabaseToCatalog
         -SqlServerName $ServerFullyQualifiedName `
         -SqlDatabaseName $DatabaseName
 
-    # Register the tenant in the catalogand add the extended metadata
-    Add-TenantToCatalog `
-        -Catalog $Catalog `
-        -TenantName $TenantName `
-        -TenantKey $TenantKey `
-        -ServerName $ServerName `
-        -DatabaseName $DatabaseName
 }
 
 
@@ -599,21 +586,22 @@ function New-Tenant
         throw "A tenant with name '$TenantName' is already registered in the catalog."    
     }
 
-    if(!$TenantDatabase)
+    # if a tenant database is input use that, otherwise use the default database 
+    if($TenantDatabase)
     {    
-        $serverName = $config.TenantsServerNameStem + $wtpUser.Name
-        $DatabaseName = $config.TenantsDatabaseName
+        $serverName = $TenantDatabase.ServerName
+        $databaseName = $TenantDatabase.DatabaseName
     }
     else
     {
-        $serverName = $TenantDatabase.ServerName
-        $DatabaseName = $TenantDatabase.DatabaseName
+        $serverName = $config.TenantsServerNameStem + $wtpUser.Name
+        $databaseName = $config.TenantsDatabaseName
     }
 
-    # Provision the tenant in the tenants database 
+    # Initialize tenant data in the database 
     Initialize-Tenant `
-        -ServerName $ServerName `
-        -DatabaseName $DatabaseName `
+        -ServerName $serverName `
+        -DatabaseName $databaseName `
         -TenantKey $tenantKey `
         -TenantName $TenantName `
         -VenueType $VenueType `
@@ -621,7 +609,7 @@ function New-Tenant
         -CountryCode 'USA'
 
     # Register the tenant and database in the catalog
-    Add-TenantDatabaseToCatalog -Catalog $catalog `
+    Add-TenantToCatalog -Catalog $catalog `
         -TenantName $TenantName `
         -TenantKey $tenantKey `
         -ServerName $serverName `

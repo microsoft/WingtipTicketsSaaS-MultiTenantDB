@@ -30,16 +30,6 @@ $wtpUser = Get-UserConfig
 # Get the WTP app configuration
 $config = Get-Configuration
 
-$serverName = $config.TenantsServerNameStem + $WtpUser.Name
-
-# Check the tenants server exists
-$tenantsServer = Get-AzureRmSqlServer -ResourceGroupName $wtpUser.ResourceGroupName -ServerName $serverName  
-
-if (!$tenantsServer)
-{
-    throw "Could not find tenants server '$serverName'."
-}
-
 # Get the catalog 
 $catalog = Get-Catalog -ResourceGroupName $wtpUser.ResourceGroupName -WtpUser $wtpUser.Name
 
@@ -54,7 +44,7 @@ if (Test-TenantKeyInCatalog -Catalog $catalog -TenantKey $tenantKey)
 # use the default server 
 $serverName = $config.TenantsServerNameStem + $wtpUser.Name
 
-# base the database name on the tenant name
+# base the new database name on the tenant name
 $databaseName = Get-NormalizedTenantName -TenantName $TenantName
  
 # create a new tenant database
@@ -63,8 +53,14 @@ $tenantDatabase = New-TenantsDatabase `
     -WtpUser $wtpUser.Name `
     -ServerName $serverName `
     -DatabaseName $databaseName
+
+# register the tenant database as a shard in the catalog
+Add-TenantDatabaseToCatalog `
+    -Catalog $catalog `
+    -ServerName $serverName `
+    -DatabaseName $databaseName
            
-# Initialize the venue information in the tenants database and register in the catalog
+# Initialize the venue information in the tenant database and register in the catalog
 New-Tenant `
     -TenantName $TenantName `
     -VenueType $VenueType `

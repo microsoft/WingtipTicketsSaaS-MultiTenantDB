@@ -4,7 +4,7 @@
 # http://events.wtp-mt.<USER>.trafficmanager.net
 
 # Parameters for scenarios #1 and #2, provision or deprovision a single tenant 
-$TenantName = "Red Maple Racing" #  name of the venue to be added/removed as a tenant
+$TenantName = "Turquoise Maple Racing" #  name of the venue to be added/removed as a tenant
 $VenueType  = "motorracing" # valid types: blues, classicalmusic, dance, jazz, judo, motorracing, multipurpose, opera, rockmusic, soccer 
 $PostalCode = "98052"
 
@@ -27,6 +27,9 @@ Import-Module "$PSScriptRoot\..\UserConfig" -Force
 # Get Azure credentials if not already logged on,  Use -Force to select a different subscription 
 Initialize-Subscription -NoEcho
 
+$wtpUser = Get-UserConfig
+$config = Get-Configuration
+
 ### Provision a tenant in the default multi-tenant database
 if ($Scenario -eq 1)
 {
@@ -40,7 +43,7 @@ if ($Scenario -eq 1)
     Write-Output "Provisioning complete for tenant '$TenantName'"
 
     # Open the events page for the new venue
-    Start-Process "http://events.wtp.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
+    Start-Process "http://events.wtp-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
     
     exit
 }
@@ -59,7 +62,7 @@ if ($Scenario -eq 2)
     Write-Output "Provisioning complete for tenant '$TenantName'"
 
     # Open the events page for the new venue
-    Start-Process "http://events.wtp.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
+    Start-Process "http://events.wtp-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
     
     exit
 }
