@@ -66,7 +66,7 @@ foreach ($newTenant in $NewTenants)
         continue    
     }   
            
-    # Initialize the tenant's venue information in the tenants database
+    # Initialize the tenant's venue information in the default tenants database
     New-Tenant `
         -TenantName $newTenantName `
         -VenueType $newTenantVenueType `
@@ -76,8 +76,8 @@ foreach ($newTenant in $NewTenants)
     Add-TenantToCatalog -Catalog $catalog `
         -TenantName $newTenantName `
         -TenantKey $tenantKey `
-        -TenantsServerName $tenantsServer.ServerName `
-        -TenantsDatabaseName $config.TenantsDatabaseName 
+        -ServerName $tenantsServer.ServerName `
+        -DatabaseName $config.TenantsDatabaseName 
 
-    Write-Output "Tenant '$newTenantName' initialized and registered in the catalog."
+    Write-Output "Provisioning complete for tenant '$newTenantName'"
 } 

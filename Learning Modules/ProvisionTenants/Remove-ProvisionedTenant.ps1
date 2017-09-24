@@ -1,15 +1,11 @@
 ﻿<#
 .SYNOPSIS
-  Deletes a tenant.  Deletes the database and all entries from the catalog. 
+  Deletes a tenant and entries from the catalog.  Deletes the database if tenant is in a single-tenant db. 
 #>
 [cmdletbinding()]
 param (
     [parameter(Mandatory=$true)][string]$TenantName
 )
-
-
-# Stop execution on error 
-#$ErrorActionPreference = "Stop"
 
 Import-Module $PSScriptRoot\..\Common\CatalogAndDatabaseManagement -Force
 Import-Module $PSScriptRoot\..\Common\SubscriptionManagement -Force
@@ -29,6 +25,8 @@ $tenantKey = Get-TenantKey -TenantName $TenantName
 # Check if the tenant is registered in the catalog. If so, remove the tenant
 if(Test-TenantKeyInCatalog -Catalog $catalog -TenantKey $tenantKey)
 {
+    # removes the tenant from the database and catalog
+    # drops the database if it was created as a single-tenant db
     Remove-Tenant `
         -Catalog $catalog `
         -TenantKey $tenantKey
