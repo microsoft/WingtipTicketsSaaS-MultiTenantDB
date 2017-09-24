@@ -81,3 +81,5 @@ foreach ($newTenant in $NewTenants)
 
     Write-Output "Provisioning complete for tenant '$newTenantName'"
 } 
+
+Write-Output "Batch provisioning complete."
