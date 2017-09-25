@@ -608,7 +608,7 @@ function New-Tenant
         -PostalCode $PostalCode `
         -CountryCode 'USA'
 
-    # Register the tenant and database in the catalog
+    # Register the tenant in the catalog
     Add-TenantToCatalog -Catalog $catalog `
         -TenantName $TenantName `
         -TenantKey $tenantKey `

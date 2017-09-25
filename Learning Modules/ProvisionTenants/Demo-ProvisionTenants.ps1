@@ -3,8 +3,8 @@
 # IMPORTANT: Before provisioning tenants using this script ensure the catalog is initialized using 
 # http://events.wtp-mt.<USER>.trafficmanager.net
 
-# Parameters for scenarios #1 and #2, provision or deprovision a single tenant 
-$TenantName = "Turquoise Maple Racing" #  name of the venue to be added/removed as a tenant
+# Parameters for scenarios #1, #2 and #3, provision or deprovision a single tenant 
+$TenantName = "Red Maple Racing" #  name of the venue to be added/removed as a tenant
 $VenueType  = "motorracing" # valid types: blues, classicalmusic, dance, jazz, judo, motorracing, multipurpose, opera, rockmusic, soccer 
 $PostalCode = "98052"
 

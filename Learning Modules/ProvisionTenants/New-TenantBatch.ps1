@@ -72,13 +72,6 @@ foreach ($newTenant in $NewTenants)
         -VenueType $newTenantVenueType `
         -PostalCode $newTenantPostalCode
 
-    # Register the tenant to database mapping in the catalog
-    Add-TenantToCatalog -Catalog $catalog `
-        -TenantName $newTenantName `
-        -TenantKey $tenantKey `
-        -ServerName $tenantsServer.ServerName `
-        -DatabaseName $config.TenantsDatabaseName 
-
     Write-Output "Provisioning complete for tenant '$newTenantName'"
 } 
 
