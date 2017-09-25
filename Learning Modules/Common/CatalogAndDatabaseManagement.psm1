@@ -677,6 +677,8 @@ function Remove-Tenant
 
     $commandText = "EXEC sp_DeleteVenue $TenantKey"
 
+    $config = Get-Configuration
+
     Invoke-SqlAzureWithRetry `
         -ServerInstance $tenantShardLocation.Server `
         -Username $config.TenantAdminuserName `
