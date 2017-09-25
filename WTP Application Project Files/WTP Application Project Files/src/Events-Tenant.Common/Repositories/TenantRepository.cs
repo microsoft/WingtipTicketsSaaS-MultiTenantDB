@@ -216,9 +216,8 @@ namespace Events_Tenant.Common.Repositories
                 using (SqlConnection sqlConn = Sharding.ShardMap.OpenConnectionForKey(tenantId, _connectionString))
                 {
                     databaseName = sqlConn.Database;
-                    databaseServerName = sqlConn.DataSource;
+                    databaseServerName = sqlConn.DataSource.Split(':').Last().Split(',').First();
                 }
-
                 var venue = await context.Venues.Where(x => x.VenueId == tenantId).FirstOrDefaultAsync();
 
                 if (venue != null)
