@@ -14,7 +14,7 @@
     "sourceDatabaseId": {
       "type": "string"
     },
-    "serviceLevelObjective": {
+    "requestedServiceObjectiveName": {
       "type": "string"
     }    
   },
@@ -26,7 +26,7 @@
       "properties": {
         "createMode": "Copy",
         "sourceDatabaseId": "[parameters('sourceDatabaseId')]",
-        "serviceLevelObjective": "[parameters('serviceLevelObjective')]"
+        "requestedServiceObjectiveName": "[parameters('requestedServiceObjectiveName')]"
       },
       "type": "Microsoft.Sql/servers/databases"
     }

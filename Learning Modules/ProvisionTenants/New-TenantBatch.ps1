@@ -66,18 +66,13 @@ foreach ($newTenant in $NewTenants)
         continue    
     }   
            
-    # Initialize the tenant's venue information in the tenants database
+    # Initialize the tenant's venue information in the default tenants database
     New-Tenant `
         -TenantName $newTenantName `
         -VenueType $newTenantVenueType `
         -PostalCode $newTenantPostalCode
 
-    # Register the tenant to database mapping in the catalog
-    Add-TenantToCatalog -Catalog $catalog `
-        -TenantName $newTenantName `
-        -TenantKey $tenantKey `
-        -TenantsServerName $tenantsServer.ServerName `
-        -TenantsDatabaseName $config.TenantsDatabaseName 
-
-    Write-Output "Tenant '$newTenantName' initialized and registered in the catalog."
+    Write-Output "Provisioning complete for tenant '$newTenantName'"
 } 
+
+Write-Output "Batch provisioning complete."

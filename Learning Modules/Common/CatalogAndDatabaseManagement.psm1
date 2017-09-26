@@ -61,7 +61,34 @@ function Add-ExtendedTenantMetaDataToCatalog
 
 <#
 .SYNOPSIS
-    Registers a tenant database in the catalog, including adding the tenant name as extended tenant meta data.
+    Registers a tenant database in the catalog
+#>
+function Add-TenantDatabaseToCatalog
+{
+    param(
+        [parameter(Mandatory=$true)]
+        [object]$Catalog,
+
+        [parameter(Mandatory=$true)]
+        [string]$ServerName,
+        
+        [parameter(Mandatory=$true)]
+        [string]$DatabaseName
+    )
+
+    $ServerFullyQualifiedName = $ServerName + ".database.windows.net"
+
+    # Add the database to the catalog shard map (idempotent)
+    Add-Shard -ShardMap $Catalog.ShardMap `
+        -SqlServerName $ServerFullyQualifiedName `
+        -SqlDatabaseName $DatabaseName
+
+}
+
+
+<#
+.SYNOPSIS
+    Registers a tenant in the catalog, including adding the tenant name as extended tenant meta data.
 #>
 function Add-TenantToCatalog
 {
@@ -76,20 +103,20 @@ function Add-TenantToCatalog
         [int32]$TenantKey,
 
         [parameter(Mandatory=$true)]
-        [string]$TenantsServerName,
+        [string]$ServerName,
 
         [parameter(Mandatory=$true)]
-        [string]$TenantsDatabaseName
+        [string]$DatabaseName
     )
 
-    $tenantsServerFullyQualifiedName = $TenantsServerName + ".database.windows.net"
+    $ServerFullyQualifiedName = $ServerName + ".database.windows.net"
 
     # Add the tenant-to-database mapping to the catalog (idempotent)
     Add-ListMapping `
         -KeyType $([int]) `
         -ListShardMap $Catalog.ShardMap `
-        -SqlServerName $tenantsServerFullyQualifiedName `
-        -SqlDatabaseName $TenantsDatabaseName `
+        -SqlServerName $ServerFullyQualifiedName `
+        -SqlDatabaseName $DatabaseName `
         -ListPoint $TenantKey
 
     # Add the tenant name to the catalog as extended meta data (idempotent)
@@ -178,6 +205,46 @@ function Get-NormalizedTenantName
     return $TenantName.Replace(' ','').ToLower()
 }
 
+
+function Get-Tenant
+{
+    param(
+        [parameter(Mandatory=$true)]
+        [object]$Catalog,
+
+        [parameter(Mandatory=$true)]
+        [string] $TenantName
+    )
+    $tenantKey = Get-TenantKey -TenantName $TenantName
+
+    try
+    {
+        $tenantShard = $Catalog.ShardMap.GetMappingForKey($tenantKey)     
+    }
+    catch
+    {
+        throw "Tenant '$TenantName' not found in catalog."
+    }
+
+    $tenantServerName = $tenantShard.Shard.Location.Server.Split('.',2)[0]
+    $tenantDatabaseName = $tenantShard.Shard.Location.Database
+
+    # requires tenant resource group is same as catalog resource group
+    $TenantResourceGroupName = $Catalog.Database.ResourceGroupName
+     
+    $tenantDatabase = Get-AzureRmSqlDatabase `
+        -ResourceGroupName $TenantResourceGroupName `
+        -ServerName $tenantServerName `
+        -DatabaseName $tenantDatabaseName 
+
+    $tenant = New-Object PSObject -Property @{
+        Name = $TenantName
+        Key = $tenantKey
+        Database = $tenantDatabase
+    }
+
+    return $tenant            
+}
 
 <#
 .SYNOPSIS
@@ -490,7 +557,10 @@ function New-Tenant
         [string]$VenueType = "multipurpose",
 
         [Parameter(Mandatory=$false)]
-        [string]$PostalCode = "98052"
+        [string]$PostalCode = "98052",
+
+        [Parameter(Mandatory=$false)]
+        [object]$TenantDatabase
 
     )
 
@@ -516,14 +586,22 @@ function New-Tenant
         throw "A tenant with name '$TenantName' is already registered in the catalog."    
     }
 
-    # get the tenants database
-    $tenantsServerName = $config.TenantsServerNameStem + $wtpUser.Name
-    $tenantsDatabaseName = $config.TenantsDatabaseName
-    
-    # Provision the tenant in the tenants database 
+    # if a tenant database is input use that, otherwise use the default database 
+    if($TenantDatabase)
+    {    
+        $serverName = $TenantDatabase.ServerName
+        $databaseName = $TenantDatabase.DatabaseName
+    }
+    else
+    {
+        $serverName = $config.TenantsServerNameStem + $wtpUser.Name
+        $databaseName = $config.TenantsDatabaseName
+    }
+
+    # Initialize tenant data in the database 
     Initialize-Tenant `
-        -ServerName $tenantsServerName `
-        -DatabaseName $tenantsDatabaseName `
+        -ServerName $serverName `
+        -DatabaseName $databaseName `
         -TenantKey $tenantKey `
         -TenantName $TenantName `
         -VenueType $VenueType `
@@ -534,14 +612,14 @@ function New-Tenant
     Add-TenantToCatalog -Catalog $catalog `
         -TenantName $TenantName `
         -TenantKey $tenantKey `
-        -TenantsServerName $tenantsServerName `
-        -TenantsDatabaseName $tenantsDatabaseName `
+        -ServerName $serverName `
+        -DatabaseName $DatabaseName
 
 }
 
 <#
 .SYNOPSIS
-    Creates a new tenantsdatabase by copying the basetenantdb using an ARM template.
+    Creates a new tenants database by copying the basetenantdb using an ARM template.  Database may be used to host one or more tenants.
 #>
 
 function New-TenantsDatabase
@@ -554,7 +632,11 @@ function New-TenantsDatabase
         [string]$WtpUser,
 
         [parameter(Mandatory=$true)]
-        [string]$ServerName
+        [string]$ServerName,
+
+        [parameter(Mandatory=$false)]
+        [string]$DatabaseName
+
     )
 
     $config = Get-Configuration
@@ -566,19 +648,24 @@ function New-TenantsDatabase
     {
         throw "Could not find tenant server '$ServerName'."
     }
+
     $tenantServerFullyQualifiedName = $ServerName + ".database.windows.net"
-    $tenantsDatabaseName = $config.TenantDatabaseName
+    
+    if (!$DatabaseName)
+    {
+        $DatabaseName = $config.TenantDatabaseName
+    }
 
     # Check the tenants database does not exist
 
     $database = Get-AzureRmSqlDatabase -ResourceGroupName $ResourceGroupName `
         -ServerName $ServerName `
-        -DatabaseName $tenantsDatabaseName `
+        -DatabaseName $DatabaseName `
         -ErrorAction SilentlyContinue
 
     if ($database)
     {
-        throw "Tenants database '$tenantsDatabaseName' already exists.  Exiting..."
+        throw "Tenants database '$DatabaseName' already exists.  Exiting..."
     }
 
     # create the tenants database
@@ -588,18 +675,19 @@ function New-TenantsDatabase
         # An alternative approach could be to deploy an empty database and then import a suitable bacpac into it to initialize it.
 
         # Construct the resource id for the 'golden' tenant database 
-        $AzureContext = Get-AzureRmContext
+        #$AzureContext = Get-AzureRmContext
         $subscriptionId = Get-SubscriptionId
-        $SourceDatabaseId = "/subscriptions/$($subscriptionId)/resourcegroups/$ResourceGroupName/providers/Microsoft.Sql/servers/$($config.CatalogServerNameStem)$WtpUser/databases/$($config.GoldenTenantDatabaseName)"
+        $SourceDatabaseId = "/subscriptions/$($subscriptionId)/resourcegroups/$ResourceGroupName/providers/Microsoft.Sql/servers/$($config.CatalogServerNameStem)$WtpUser/databases/$($config.GoldenTenantsDatabaseName)"
 
         # Use an ARM template to create the tenant database by copying the 'golden' database
         $deployment = New-AzureRmResourceGroupDeployment `
-            -TemplateFile ($PSScriptRoot + "\" + $config.TenantDatabaseCopyTemplate) `
+            -TemplateFile ($PSScriptRoot + "\" + $config.TenantsDatabaseCopyTemplate) `
             -Location $Server.Location `
             -ResourceGroupName $ResourceGroupName `
             -SourceDatabaseId $sourceDatabaseId `
             -ServerName $ServerName `
-            -DatabaseName $tenantsDatabaseName `
+            -DatabaseName $DatabaseName `
+            -RequestedServiceObjectiveName $config.TenantsDatabaseSingletonServiceObjective `
             -ErrorAction Stop `
             -Verbose
     }
@@ -609,6 +697,14 @@ function New-TenantsDatabase
         Write-Error "An error occured deploying the tenants database"
         throw
     }
+
+    $database = Get-AzureRmSqlDatabase -ResourceGroupName $ResourceGroupName `
+        -ServerName $ServerName `
+        -DatabaseName $DatabaseName `
+        -ErrorAction Stop
+
+    return $database
+
 }
 
 <#
@@ -654,7 +750,7 @@ function Remove-ExtendedTenant
 
 <#
 .SYNOPSIS
-    Removes all data asscociate with a tenant from the tenants database,plus its extended metadata and mapping entry from the catalog database.
+    Removes all data asscociate with a tenant from its hosting database, plus its extended metadata and mapping entry from the catalog database.
 #>
 function Remove-Tenant
 {
@@ -667,42 +763,58 @@ function Remove-Tenant
         [int32]$TenantKey
     )
 
+    $config = Get-Configuration
+
     # Take tenant offline
     Set-TenantOffline -Catalog $Catalog -TenantKey $TenantKey
 
     $tenantMapping = $Catalog.ShardMap.GetMappingForKey($TenantKey)
     $tenantShardLocation = $tenantMapping.Shard.Location
+    $databaseNameRoot = $tenantShardLocation.Database.Substring(0,$config.tenantsDatabaseNameStem.Length).ToLower()
 
-    # Delete tenant entry from database
+    # determine if the tenant is hosted in a generic multi-tenant database
+    if ($databaseNameRoot -eq $config.tenantsDatabaseNameStem)
+    {
+        # Delete tenant entry from the database
 
-    $commandText = "EXEC sp_DeleteVenue $TenantKey"
+        $commandText = "EXEC sp_DeleteVenue $TenantKey"
 
-    $config = Get-Configuration
+        Invoke-SqlAzureWithRetry `
+            -ServerInstance $tenantShardLocation.Server `
+            -Username $config.TenantAdminuserName `
+            -Password $config.TenantAdminPassword `
+            -Database $tenantShardLocation.Database `
+            -Query $commandText
 
-    Invoke-SqlAzureWithRetry `
-        -ServerInstance $tenantShardLocation.Server `
-        -Username $config.TenantAdminuserName `
-        -Password $config.TenantAdminPassword `
-        -Database $tenantShardLocation.Database `
-        -Query $commandText
+        # Delete tenant mapping from catalog
+        $Catalog.ShardMap.DeleteMapping($tenantMapping)
 
+    }
+    else
+    {           
+        # Delete tenant mapping from catalog
+        $Catalog.ShardMap.DeleteMapping($tenantMapping)      
+        
+        # Get updated shard entry and delete it from catalog
+        $tenantShard = $Catalog.ShardMap.GetShard($tenantShardLocation)      
+        $Catalog.ShardMap.DeleteShard($tenantShard)
 
-    # Remove Tenant entry from Tenants table and corresponding database entry from Databases table
+        # Delete tenant database
+        Remove-AzureRmSqlDatabase `
+            -ResourceGroupName $Catalog.Database.ResourceGroupName `
+            -ServerName ($tenantShard.Location.Server).Split('.')[0] `
+            -DatabaseName $tenantShard.Location.Database `
+            -ErrorAction Continue `
+            >$null
+                  
+    }
+
+    # Remove Tenant entry from Tenants table
     Remove-ExtendedTenant `
         -Catalog $Catalog `
         -TenantKey $TenantKey `
         -ServerName ($tenantShardLocation.Server).Split('.')[0] `
         -DatabaseName $tenantShardLocation.Database 
-
-    # Delete catalog mapping for tenant
-    try 
-    {
-        $Catalog.ShardMap.DeleteMapping($tenantMapping)
-    }
-    catch 
-    {
-        # Do nothing if mapping is already deleted 
-    }
 
 }
 
