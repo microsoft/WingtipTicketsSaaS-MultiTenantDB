@@ -264,7 +264,7 @@
           "type": "config",
           "name": "appsettings",
           "properties": {
-            "BlobPath": "https://wingtipsaas.blob.core.windows.net/images/",
+            "BlobPath": "https://wingtipsaas.blob.core.windows.net/images-mt/",
             "ConnectionTimeOut": "30",
             "CatalogDatabase": "[variables('catalogDatabaseName')]",
             "CatalogServer": "[variables('catalogServer')]",
