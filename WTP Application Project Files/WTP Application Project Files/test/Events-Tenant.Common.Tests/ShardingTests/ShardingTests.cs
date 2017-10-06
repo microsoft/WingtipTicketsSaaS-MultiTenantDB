@@ -5,6 +5,8 @@ using Events_TenantUserApp.EF.CatalogDB;
 using Microsoft.Azure.SqlDatabase.ElasticScale.ShardManagement;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Threading.Tasks;
+using Events_Tenant.Common.Tests.MockRepositories;
 
 namespace Events_Tenant.Common.Tests.ShardingTests
 {
@@ -15,7 +17,7 @@ namespace Events_Tenant.Common.Tests.ShardingTests
 
         //Use your local SQL Server instance name
         internal const string TestServer = @"localhost";
-        
+
         //If your local instance does not support Windows Authentication change here for SQL Authentication
         internal const string ShardMapManagerTestConnectionString = "Data Source=" + TestServer + ";Integrated Security=True;";
 
@@ -26,8 +28,8 @@ namespace Events_Tenant.Common.Tests.ShardingTests
         private DatabaseConfig _databaseConfig;
         private string _connectionString;
 
-        private Mock<ICatalogRepository> _mockCatalogRepo;
-        private Mock<ITenantRepository> _mockTenantRepo;
+        private MockCatalogRepository _mockCatalogRepo;
+        private MockTenantRepository _mockTenantRepo;
         private Mock<IUtilities> _mockUtilities;
 
         #endregion
@@ -61,10 +63,10 @@ namespace Events_Tenant.Common.Tests.ShardingTests
 
             _connectionString = string.Format("{0}Initial Catalog={1};", ShardMapManagerTestConnectionString, _catalogConfig.CatalogDatabase);
 
-            _mockCatalogRepo = new Mock<ICatalogRepository>();
-            _mockCatalogRepo.Setup(repo => repo.Add(tenant));
+            _mockCatalogRepo = new MockCatalogRepository();
+            _mockCatalogRepo.Add(tenant);
 
-            _mockTenantRepo = new Mock<ITenantRepository>();
+            _mockTenantRepo = new MockTenantRepository();
 
             _mockUtilities = new Mock<IUtilities>();
 
@@ -97,27 +99,27 @@ namespace Events_Tenant.Common.Tests.ShardingTests
         [TestMethod]
         public void ShardingTest()
         {
-            var sharding = new Sharding(_catalogConfig.CatalogDatabase, _connectionString, _mockCatalogRepo.Object, _mockTenantRepo.Object, _mockUtilities.Object);
+            var sharding = new Sharding(_catalogConfig.CatalogDatabase, _connectionString, _mockCatalogRepo, _mockTenantRepo, _mockUtilities.Object);
 
             Assert.IsNotNull(sharding);
             Assert.IsNotNull(sharding.ShardMapManager);
         }
 
         [TestMethod]
-        public async void RegisterShardTest()
+        public async Task RegisterShardTest()
         {
             _databaseConfig = new DatabaseConfig
             {
                 SqlProtocol = SqlProtocol.Default
             };
 
-            var sharding = new Sharding(_catalogConfig.CatalogDatabase, _connectionString, _mockCatalogRepo.Object, _mockTenantRepo.Object, _mockUtilities.Object);
+            var sharding = new Sharding(_catalogConfig.CatalogDatabase, _connectionString, _mockCatalogRepo, _mockTenantRepo, _mockUtilities.Object);
             Assert.IsNotNull(sharding);
 
             var shard = Sharding.CreateNewShard("Test Tenant 1", TestServer, _databaseConfig.DatabaseServerPort, _catalogConfig.ServicePlan);
             Assert.IsNotNull(shard);
 
-            var result = await Sharding.RegisterNewShard(397858529, _catalogConfig.ServicePlan, shard);
+            var result = await Sharding.RegisterNewShard(1032943028, _catalogConfig.ServicePlan, shard);
             Assert.IsTrue(result);
         }
     }
