@@ -575,6 +575,8 @@ function New-Tenant
     # Validate tenant name
     $TenantName = $TenantName.Trim()
     Test-LegalName $TenantName > $null
+
+    #validate venue type against venue types in basetenantdb
     Test-ValidVenueType $VenueType -Catalog $catalog > $null
 
     # Compute the tenant key from the tenant name, key is used to register the tenant in the catalog 
