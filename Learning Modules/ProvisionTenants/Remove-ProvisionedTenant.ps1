@@ -31,7 +31,7 @@ if(Test-TenantKeyInCatalog -Catalog $catalog -TenantKey $tenantKey)
         -Catalog $catalog `
         -TenantKey $tenantKey
 
-    Write-Output "'$TenantName' is removed."
+    Write-Output "Tenant '$TenantName' is removed."
 }
 else
 {
