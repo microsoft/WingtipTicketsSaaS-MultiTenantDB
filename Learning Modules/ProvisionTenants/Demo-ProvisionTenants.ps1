@@ -15,6 +15,8 @@ $Scenario = 1
     2       Provision a tenant in a new single-tenant database
     3       Remove a provisioned tenant
     4       Provision a batch of tenants
+    5       Get tenant key
+
 #>
 
 ## ------------------------------------------------------------------------------------------------
@@ -84,6 +86,16 @@ if ($Scenario -eq 4)
 
     & $PSScriptRoot\New-TenantBatch.ps1 `
         -NewTenants $tenantNames 
+
+    exit
+} 
+
+### get tenant key
+if ($Scenario -eq 5)
+{
+    $tenantKey = Get-TenantKey -TenantName $TenantName
+    
+    $tenantKey
 
     exit
 } 
