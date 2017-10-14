@@ -176,7 +176,7 @@ foreach ($tenantsDatabase in $tenantsDatabases)
         # pre-defined venues use same popularity every time 
         if     ($venueName -eq 'Contoso Concert Hall') { $popularity = "popular"}
         elseif ($venueName -eq 'Fabrikam Jazz Club')   { $popularity = "moderate"}
-        elseif ($venueName -eq 'Dogwood Dojo')        { $popularity = "unpopular"}
+        elseif ($venueName -eq 'Dogwood Dojo')         { $popularity = "unpopular"}
         else
         {
             # set random popularity for all other venues   
@@ -186,8 +186,8 @@ foreach ($tenantsDatabase in $tenantsDatabases)
         # assign the venue curves based on popularity 
         switch ($popularity) 
         {
-            "popular" {$venueCurves = $popularCurves}
-            "moderate" {$venueCurves = $moderateCurves}
+            "popular"   {$venueCurves = $popularCurves}
+            "moderate"  {$venueCurves = $moderateCurves}
             "unpopular" {$venueCurves = $unpopularCurves}
         }
 
