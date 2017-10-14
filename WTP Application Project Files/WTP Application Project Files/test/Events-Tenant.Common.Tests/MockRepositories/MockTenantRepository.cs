@@ -206,7 +206,7 @@ namespace Events_Tenant.Common.Tests.MockRepositories
                     VenueType = "pop",
                     VenueName = "Test Tenant 1",
                     PostalCode = "123",
-                    AdminEmail = "popadmin@email.com",
+                    AdminEmail = "admin@email.com",
                     AdminPassword = "password",
                     VenueId = -1929398168
                 },
