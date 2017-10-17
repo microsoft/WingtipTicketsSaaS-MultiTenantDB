@@ -45,7 +45,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var country = await context.Countries.Where(x => x.CountryCode == countryCode).FirstOrDefaultAsync();
+                var country = await context.Countries.FirstOrDefaultAsync(x => x.CountryCode == countryCode);
                 return country?.ToCountryModel();
             }
         }
