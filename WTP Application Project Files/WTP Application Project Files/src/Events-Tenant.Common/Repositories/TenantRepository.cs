@@ -72,8 +72,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var customer = await context.Customers.Where(i => i.Email == email && i.VenueId == tenantId).FirstOrDefaultAsync();
-
+                var customer = await context.Customers.FirstOrDefaultAsync(i => i.Email == email && i.VenueId == tenantId);
                 return customer?.ToCustomerModel();
             }
         }
@@ -111,7 +110,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var eventModel = await context.Events.Where(i => i.EventId == eventId && i.VenueId == tenantId).FirstOrDefaultAsync();
+                var eventModel = await context.Events.FirstOrDefaultAsync(i => i.EventId == eventId && i.VenueId == tenantId);
 
                 return eventModel?.ToEventModel();
             }
@@ -135,7 +134,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var section = await context.Sections.Where(i => i.SectionId == sectionId && i.VenueId == tenantId).FirstOrDefaultAsync();
+                var section = await context.Sections.FirstOrDefaultAsync(i => i.SectionId == sectionId && i.VenueId == tenantId);
 
                 return section?.ToSectionModel();
             }
@@ -158,25 +157,11 @@ namespace Events_Tenant.Common.Repositories
                 return ticketPurchase.TicketPurchaseId;
             }
         }
-
-        public async Task<int> GetNumberOfTicketPurchases(int tenantId)
-        {
-            using (var context = CreateContext(tenantId))
-            {
-                var ticketPurchases = await context.TicketPurchases.Where(i => i.VenueId == tenantId).ToListAsync();
-                if (ticketPurchases.Any())
-                {
-                    return ticketPurchases.Count();
-                }
-            }
-            return 0;
-        }
-
         #endregion
 
         #region Tickets
 
-        public async Task<bool> AddTicket(List<TicketModel> ticketModel, int tenantId)
+        public async Task<bool> AddTickets(List<TicketModel> ticketModel, int tenantId)
         {
             using (var context = CreateContext(tenantId))
             {
@@ -218,7 +203,7 @@ namespace Events_Tenant.Common.Repositories
                     databaseName = sqlConn.Database;
                     databaseServerName = sqlConn.DataSource.Split(':').Last().Split(',').First();
                 }
-                var venue = await context.Venues.Where(x => x.VenueId == tenantId).FirstOrDefaultAsync();
+                var venue = await context.Venues.FirstOrDefaultAsync(x => x.VenueId == tenantId);
 
                 if (venue != null)
                 {
@@ -239,7 +224,7 @@ namespace Events_Tenant.Common.Repositories
         {
             using (var context = CreateContext(tenantId))
             {
-                var venueTypeDetails = await context.VenueTypes.Where(i => i.VenueType == venueType).FirstOrDefaultAsync();
+                var venueTypeDetails = await context.VenueTypes.FirstOrDefaultAsync(i => i.VenueType == venueType);
 
                 return venueTypeDetails?.ToVenueTypeModel();
             }
