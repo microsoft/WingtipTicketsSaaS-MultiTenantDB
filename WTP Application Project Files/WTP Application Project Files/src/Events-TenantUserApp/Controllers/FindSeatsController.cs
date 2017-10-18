@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Events_Tenant.Common.Interfaces;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 
 namespace Events_TenantUserApp.Controllers
 {
@@ -35,7 +35,6 @@ namespace Events_TenantUserApp.Controllers
         }
 
         #endregion
-
 
         [Route("FindSeats")]
         public async Task<ActionResult> FindSeats(string tenant, int eventId)
@@ -115,7 +114,6 @@ namespace Events_TenantUserApp.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("PurchaseTickets")]
         public async Task<ActionResult> PurchaseTickets(string tenant, int eventId, int customerId, decimal ticketPrice, int ticketCount, int sectionId)
@@ -152,7 +150,6 @@ namespace Events_TenantUserApp.Controllers
             }
             return RedirectToAction("Index", "Events", new { tenant });
         }
-
 
     }
 }

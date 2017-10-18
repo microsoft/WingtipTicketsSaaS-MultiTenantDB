@@ -4,7 +4,7 @@ using Events_Tenant.Common.Models;
 
 namespace Events_Tenant.Common.Interfaces
 {
-   public interface ITenantRepository
+    public interface ITenantRepository
     {
         #region Countries
 

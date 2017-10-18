@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using Microsoft.Azure.SqlDatabase.ElasticScale.ShardManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -47,7 +46,6 @@ namespace Events_TenantUserApp.EF.TenantsDB
 
             return options;
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
