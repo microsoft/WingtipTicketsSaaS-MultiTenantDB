@@ -229,9 +229,11 @@ namespace Events_TenantUserApp
                 TenantDatabase = Configuration["TenantDatabase"],
 
             };
-            bool val = false;
-            if (bool.TryParse(Configuration["ResetEventDates"], out val))
-                TenantServerConfig.ResetEventDates = val;
+            bool isResetEventDatesEnabled = false;
+            if (bool.TryParse(Configuration["ResetEventDates"], out isResetEventDatesEnabled))
+            {
+                TenantServerConfig.ResetEventDates = isResetEventDatesEnabled;
+            }
         }
 
         /// <summary>
