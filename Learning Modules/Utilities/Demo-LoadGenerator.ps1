@@ -17,7 +17,7 @@ $Scenario = 2
       1   Start a normal intensity load (approx 30 DTU) 
       2   Start a load with longer bursts per database
       3   Start a load with higher DTU bursts per database (approx 70 DTU)  
-      4   Start a high intensity load (approx 95 DTU) on a single tenant plas a normal intensity load on all other tenants 
+      4   Start a high intensity load (approx 95 DTU) on a single tenant plus a normal intensity load on all other tenants 
 #>
 
 ## ------------------------------------------------------------------------------------------------
