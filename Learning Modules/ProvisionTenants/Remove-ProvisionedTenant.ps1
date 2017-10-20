@@ -26,7 +26,7 @@ $tenantKey = Get-TenantKey -TenantName $TenantName
 if(Test-TenantKeyInCatalog -Catalog $catalog -TenantKey $tenantKey)
 {
     # removes the tenant from the database and catalog
-    # drops the database if it was created as a single-tenant db
+    # and drops the database if it was created as a single-tenant db
     Remove-Tenant `
         -Catalog $catalog `
         -TenantKey $tenantKey
