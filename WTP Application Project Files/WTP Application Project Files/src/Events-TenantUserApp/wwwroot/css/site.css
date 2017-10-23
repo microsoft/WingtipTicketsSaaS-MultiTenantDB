@@ -57,7 +57,13 @@ tr {
 .p-copyright {
     margin: 0 0 0 87px;
     font-size: 12pt;
-    /*float: right;*/
+    clear: both !important;
+    color: #fff;
+}
+
+.div-copyright {
+    margin: 10px 0 0 -30px;
+    font-size: 12pt;
     clear: both !important;
     color: #fff;
 }
