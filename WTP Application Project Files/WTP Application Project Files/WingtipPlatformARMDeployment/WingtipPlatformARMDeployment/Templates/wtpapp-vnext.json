@@ -30,8 +30,8 @@
     "tenantDatabaseStorageUri": "[concat('https://wingtipsaas.blob.core.windows.net/bacpacs-mt/',variables('tenantDatabaseName'),'.bacpac')]",
     "catalogDatabaseStorageUri": "https://wingtipsaas.blob.core.windows.net/bacpacs-mt/wingtipcatalogdb.bacpac",
     "baseTenantDatabaseStorageUri": "https://wingtipsaas.blob.core.windows.net/bacpacs-mt/basetenantdb.bacpac",
-    "wtpEventsAppTrafficManagerUniqueDnsName": "[concat('events.wtp','-',variables('multiTenantSuffix'),'.',variables('lowerCaseUser'))]",
-    "wtpEventsApp": "[concat('eventswtp','-',variables('multiTenantSuffix'),'-',variables('lowerCaseUser'))]",
+    "wtpEventsAppTrafficManagerUniqueDnsName": "[concat('events.wingtip','-',variables('multiTenantSuffix'),'.',variables('lowerCaseUser'))]",
+    "wtpEventsApp": "[concat('events-wingtip-',variables('multiTenantSuffix'),'-',variables('lowerCaseUser'))]",
     "wtpEventsAppPackageUri": "https://wingtipsaas.blob.core.windows.net/packages-mt/eventsAppPackage.zip"
   },
   "resources": [
