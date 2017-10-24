@@ -4,7 +4,7 @@ namespace Events_Tenant.Common.Models
 {
     public class VenuesModel
     {
-        public int VenueId { get; set;  }
+        public int VenueId { get; set; }
 
         public string VenueName { get; set; }
 

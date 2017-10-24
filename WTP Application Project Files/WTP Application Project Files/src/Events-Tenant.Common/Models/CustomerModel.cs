@@ -25,7 +25,7 @@ namespace Events_Tenant.Common.Models
         public string TenantName { get; set; }
 
         public int VenueId { get; set; }
-     
+
         public byte[] RowVersion { get; set; }
     }
 }
