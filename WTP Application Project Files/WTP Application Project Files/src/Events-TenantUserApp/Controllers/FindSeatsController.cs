@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Events_Tenant.Common.Interfaces;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 
 namespace Events_TenantUserApp.Controllers
 {
@@ -35,7 +35,6 @@ namespace Events_TenantUserApp.Controllers
         }
 
         #endregion
-
 
         [Route("FindSeats")]
         public async Task<ActionResult> FindSeats(string tenant, int eventId)
@@ -81,6 +80,7 @@ namespace Events_TenantUserApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(0, ex, "FindSeats failed for tenant {tenant} and event {eventId}", tenant, eventId);
+                return View("TenantError", tenant);
             }
             return RedirectToAction("Index", "Events", new { tenant });
         }
@@ -114,63 +114,29 @@ namespace Events_TenantUserApp.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("PurchaseTickets")]
-        public async Task<ActionResult> PurchaseTickets(string tenant, string eventId, string customerId, string ticketPrice, string ticketCount, string sectionId)
+        public async Task<ActionResult> PurchaseTickets(string tenant, int eventId, int customerId, decimal ticketPrice, int ticketCount, int sectionId)
         {
             try
             {
                 bool purchaseResult = false;
-                int numberOfTickets = Convert.ToInt32(ticketCount);
-
-                if (string.IsNullOrEmpty(eventId) || string.IsNullOrEmpty(customerId) || string.IsNullOrEmpty(ticketPrice) || string.IsNullOrEmpty(ticketCount))
-                {
-                    var message = _localizer["Enter quantity"];
-                    DisplayMessage(message, "Confirmation");
-                    return RedirectToAction("Index", "Events", new { tenant });
-                }
-
                 var ticketPurchaseModel = new TicketPurchaseModel
                 {
-                    CustomerId = Convert.ToInt32(customerId),
-                    PurchaseTotal = Convert.ToDecimal(ticketPrice)
+                    CustomerId = customerId,
+                    PurchaseTotal = ticketPrice
                 };
-
                 var tenantDetails = (_catalogRepository.GetTenant(tenant)).Result;
                 if (tenantDetails != null)
                 {
                     SetTenantConfig(tenantDetails.TenantId, tenantDetails.TenantIdInString);
-
-                    var latestPurchaseTicketId = await _tenantRepository.GetNumberOfTicketPurchases(tenantDetails.TenantId);
-                    ticketPurchaseModel.TicketPurchaseId = latestPurchaseTicketId + 1;
-
                     var purchaseTicketId = await _tenantRepository.AddTicketPurchase(ticketPurchaseModel, tenantDetails.TenantId);
-
-                    var ticketModel = new List<TicketModel>();
-                    for (var i = 0; i < numberOfTickets; i++)
-                    {
-                        ticketModel.Add(new TicketModel
-                        {
-                            SectionId = Convert.ToInt32(sectionId),
-                            EventId = Convert.ToInt32(eventId),
-                            TicketPurchaseId = purchaseTicketId,
-                            RowNumber = Convert.ToInt32(sectionId) + Convert.ToInt32(eventId) + purchaseTicketId, // ensures that the ticket purchased  row number is always unique
-                            SeatNumber = i + 1
-                        });
-                    }
-                    purchaseResult = await _tenantRepository.AddTicket(ticketModel, tenantDetails.TenantId);
-
+                    List<TicketModel> ticketsModel = BuildTicketModel(eventId, sectionId, ticketCount, purchaseTicketId);
+                    purchaseResult = await _tenantRepository.AddTickets(ticketsModel, tenantDetails.TenantId);
                     if (purchaseResult)
-                    {
-                        var successMessage = _localizer[$"You have successfully purchased {ticketCount} ticket(s)."];
-                        DisplayMessage(successMessage, "Confirmation");
-                    }
+                        DisplayMessage(_localizer[$"You have successfully purchased {ticketCount} ticket(s)."], "Confirmation");
                     else
-                    {
-                        var failureMessage = _localizer["Failed to purchase tickets."];
-                        DisplayMessage(failureMessage, "Error");
-                    }
+                        DisplayMessage(_localizer["Failed to purchase tickets."], "Error");
                 }
                 else
                 {
@@ -180,8 +146,10 @@ namespace Events_TenantUserApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(0, ex, "Purchase tickets failed for tenant {tenant} and event {eventId}", tenant, eventId);
+                return View("TenantError", tenant);
             }
             return RedirectToAction("Index", "Events", new { tenant });
         }
+
     }
 }

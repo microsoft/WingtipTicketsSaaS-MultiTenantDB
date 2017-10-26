@@ -223,15 +223,18 @@ namespace Events_TenantUserApp
                 CatalogDatabase = Configuration["CatalogDatabase"],
                 CatalogServer = Configuration["CatalogServer"] + ".database.windows.net"
             };
-
             TenantServerConfig = new TenantServerConfig
             {
                 TenantServer = Configuration["TenantServer"] + ".database.windows.net",
                 TenantDatabase = Configuration["TenantDatabase"],
-                ResetEventDates = Convert.ToBoolean(Configuration["ResetEventDates"])
-            };
-        }
 
+            };
+            bool isResetEventDatesEnabled = false;
+            if (bool.TryParse(Configuration["ResetEventDates"], out isResetEventDatesEnabled))
+            {
+                TenantServerConfig.ResetEventDates = isResetEventDatesEnabled;
+            }
+        }
 
         /// <summary>
         /// Initialises the shard map manager and shard map 

@@ -694,7 +694,6 @@ function Publish-AspNetMSDeploy{
                 }
             }
 
-
             [System.IO.FileInfo]$destXMLFile = GenerateInternal-ManifestFile -packOutput $packOutput -publishProperties $publishProperties -providerDataArray $providerDataArray -manifestFileName 'DestinationManifest.xml'
   
             <#
@@ -1038,7 +1037,6 @@ function Execute-Command {
         Unregister-Event -SourceIdentifier $stdErrEvent.Name | Out-Null
     }
 }
-
 
 function GetInternal-DotNetExePath {
     process {

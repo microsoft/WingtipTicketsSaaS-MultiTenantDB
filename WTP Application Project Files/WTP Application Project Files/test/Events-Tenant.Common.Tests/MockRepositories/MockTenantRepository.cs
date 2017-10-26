@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Events_Tenant.Common.Interfaces;
 using Events_Tenant.Common.Models;
@@ -257,7 +257,7 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<SectionModel> GetSection(int sectionId, int tenantId)
         {
-            return SectionModels.Where(i => i.VenueId == tenantId).FirstOrDefault();
+            return SectionModels.FirstOrDefault(i => i.VenueId == tenantId);
         }
 
         public async Task<int> AddTicketPurchase(TicketPurchaseModel ticketPurchaseModel, int tenantId)
@@ -269,10 +269,10 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<int> GetNumberOfTicketPurchases(int tenantId)
         {
-            return TicketPurchaseModels.Where(i => i.VenueId == tenantId).Count();
+            return TicketPurchaseModels.Count(i => i.VenueId == tenantId);
         }
 
-        public async Task<bool> AddTicket(List<TicketModel> ticketModel, int tenantId)
+        public async Task<bool> AddTickets(List<TicketModel> ticketModel, int tenantId)
         {
             foreach (TicketModel tkt in ticketModel)
             {
@@ -284,12 +284,12 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<int> GetTicketsSold(int sectionId, int eventId, int tenantId)
         {
-            return TicketModels.Where(i => i.VenueId == tenantId).Count();
+            return TicketModels.Count(i => i.VenueId == tenantId);
         }
 
         public async Task<VenuesModel> GetVenueDetails(int tenantId)
         {
-            return VenuesModels.Where(i => i.VenueId == tenantId).FirstOrDefault();
+            return VenuesModels.FirstOrDefault(i => i.VenueId == tenantId);
         }
 
         public async Task<VenueTypeModel> GetVenueType(string venueType, int tenantId)
@@ -312,7 +312,7 @@ namespace Events_Tenant.Common.Tests.MockRepositories
 
         public async Task<EventModel> GetEvent(int eventId, int tenantId)
         {
-            return EventModels.Where(i => i.EventId == eventId && i.VenueId == tenantId).FirstOrDefault();
+            return EventModels.FirstOrDefault(i => i.EventId == eventId && i.VenueId == tenantId);
         }
 
     }

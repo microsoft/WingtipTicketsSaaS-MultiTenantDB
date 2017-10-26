@@ -91,6 +91,7 @@ namespace Events_TenantUserApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(0, ex, "Login failed for tenant {tenant}", tenant);
+                return View("TenantError", tenant);
             }
             return Redirect(Request.Headers["Referer"].ToString());
         }
@@ -110,6 +111,7 @@ namespace Events_TenantUserApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(0, ex, "Log out failed for tenant {tenant}", tenant);
+                return View("TenantError", tenant);
             }
             return RedirectToAction("Index", "Events", new { tenant });
         }
@@ -168,6 +170,7 @@ namespace Events_TenantUserApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(0, ex, "Registration failed for tenant {tenant}", tenant);
+                return View("TenantError", tenant);
             }
             return Redirect(Request.Headers["Referer"].ToString());
         }
