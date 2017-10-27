@@ -23,7 +23,7 @@ Param(
     [switch] $SingleTenant,
 
     # If SingleTenant is enabled, defines the load in DTU applied to an isolated tenant 
-    [int][validateRange(1,100)] $SingleTenantDtu = 45,
+    [int][validateRange(1,100)] $SingleTenantDtu = 90,
 
     # If singleTenant is enabled, identifes the tenant.  If not specified a random tenant database is chosen
     [string]$SingleTenantName = "Contoso Concert Hall",
@@ -79,7 +79,7 @@ $burstMaxFactor = 1.1
 # Load factor impacts DTU levels and interval between bursts -> interval = interval/loadFactor (low load factor ==> longer intervals)
 
 # Load factor for single tenant burst mode
-$intenseLoadFactor = 10.00
+$intenseLoadFactor = 4.00
 
 # density load factor, decreases the database load with more tenants, allowing more interesting demos with small numbers of tenants
 # It impacts the interval between bursts [interval = interval + (interval * densityLoadFactor * tenantsCount)]

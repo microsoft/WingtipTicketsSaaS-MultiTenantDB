@@ -1,4 +1,4 @@
-﻿# Invokes load generation on the tenant databases currently defined in the catalog.  
+﻿# Invokes load generation on the tenants currently defined in the catalog.  
  
 # Duration of the load generation session. Some activity may continue after this time. 
 $DurationMinutes = 120
@@ -15,9 +15,9 @@ $Scenario = 1
     Scenario
       0   None
       1   Start a normal intensity load (approx 30 DTU) 
-      2   Start a load with longer bursts per database
-      3   Start a load with higher DTU bursts per database (approx 70 DTU)  
-      4   Start a high intensity load (approx 45 DTU) on a single tenant plus a normal intensity load on all other tenants 
+      2   Start a load with longer bursts per tenant
+      3   Start a load with higher DTU bursts per tenant (approx 70 DTU)  
+      4   Start a high intensity load (approx 90 DTU) on a single tenant plus a normal intensity load on all other tenants 
 #>
 
 ## ------------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ Initialize-Subscription -NoEcho
 
 Save-AzureRmContext -Path $env:temp\AzureContext.json -Force
 
-# Get the resource group and user names used when the WTP application was deployed from UserConfig.psm1.  
+# Get the resource group and user names used when the Wingtip Tickets application was deployed from UserConfig.psm1.  
 $wtpUser = Get-UserConfig
 
 ### Default state - enter a valid demo scenaro 
@@ -51,7 +51,7 @@ if ($Scenario -eq 1)
     # Intensity of load, roughly approximates to average DTU loading on the tenants 
     $Intensity = 30   
 
-    # start a new set of load generation jobs for the current databases with the load configuration above
+    # start a new set of load generation jobs for the current tenants with the load configuration above
     $powershellArgs = `
         "-NoExit", `
         "-File ""$($PSScriptRoot)\LoadGenerator2.ps1""",`
@@ -68,7 +68,7 @@ if ($Scenario -eq 1)
     exit
 }
 
-### Generate load with longer bursts per database
+### Generate load with longer bursts per tenant
 if ($Scenario -eq 2)
 {       
     # First, stop and remove any prior running jobs
@@ -79,7 +79,7 @@ if ($Scenario -eq 2)
     # Intensity of workload, roughly approximates to DTU 
     $Intensity = 30
 
-    # start a new set of load generation jobs for the current databases
+    # start a new set of load generation jobs for the current tenants
     $powershellArgs = `
         "-NoExit", `
         "-File ""$($PSScriptRoot)\LoadGenerator2.ps1""",`
@@ -97,7 +97,7 @@ if ($Scenario -eq 2)
     exit 
 }      
 
-### Generate load with higher DTU bursts per database
+### Generate load with higher DTU bursts per tenant
 if ($Scenario -eq 3)
 {       
     # First, stop and remove any prior running jobs
@@ -108,7 +108,7 @@ if ($Scenario -eq 3)
     # Intensity of workload, roughly approximates to DTU 
     $Intensity = 70
 
-    # start a new set of load generation jobs for the current databases
+    # start a new set of load generation jobs for the current tenants
     $powershellArgs = `
         "-NoExit", `
         "-File ""$($PSScriptRoot)\LoadGenerator2.ps1""",`
@@ -142,7 +142,7 @@ if ($Scenario -eq 4)
     # Intensity of workload, roughly approximates to DTU 
     $Intensity = 30
 
-    # start a new set of load generation jobs for the current databases
+    # start a new set of load generation jobs for the current tenants
     $powershellArgs = `
         "-NoExit", `
         "-File ""$($PSScriptRoot)\LoadGenerator2.ps1""",`
