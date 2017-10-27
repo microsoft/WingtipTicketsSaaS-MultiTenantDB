@@ -23,10 +23,10 @@ Param(
     [switch] $SingleTenant,
 
     # If SingleTenant is enabled, defines the load in DTU applied to an isolated tenant 
-    [int][validateRange(1,100)] $SingleTenantDtu = 95,
+    [int][validateRange(1,100)] $SingleTenantDtu = 45,
 
-    # If singleTenant is enabled, identifes the tenant database.  If not specified a random tenant database is chosen
-    [string]$SingleTenantDatabaseName = "contosoconcerthall",
+    # If singleTenant is enabled, identifes the tenant.  If not specified a random tenant database is chosen
+    [string]$SingleTenantName = "Contoso Concert Hall",
 
     [switch]$LongerBursts,
 
@@ -75,9 +75,15 @@ if ($LongerBursts.IsPresent) {$intervalMin = $intervalMin * 0.9; $intervalMax = 
 $burstMinFactor = 0.6
 $burstMaxFactor = 1.1
 
-# density load factor, decreases the database load with more dbs, allowing more interesting demos with small numbers of tenants
-# It impacts the interval between bursts [interval = interval + (interval * densityLoadFactor * dbcount)]
-# 0 removes the effect, 0.1 will double the typical interval for 10 dbs  
+# Load factor skews the load on databases for intense single tenant usage scenarios.  
+# Load factor impacts DTU levels and interval between bursts -> interval = interval/loadFactor (low load factor ==> longer intervals)
+
+# Load factor for single tenant burst mode
+$intenseLoadFactor = 10.00
+
+# density load factor, decreases the database load with more tenants, allowing more interesting demos with small numbers of tenants
+# It impacts the interval between bursts [interval = interval + (interval * densityLoadFactor * tenantsCount)]
+# 0 removes the effect, 0.1 will double the typical interval for 10 tenants  
 $densityLoadFactor = 0.11
 
 $CatalogServerName = $config.CatalogServerNameStem + $WtpUser
@@ -97,7 +103,7 @@ if($SingleTenant)
 {
     if ($SingleTenantDatabaseName -ne "")
     {
-        $settings += ", Database: $SingleTenantDatabaseName"
+        $settings += ", Tenant: $SingleTenantName"
     }
     $settings += ", DTU: $singleTenantDtu"
 }
@@ -142,6 +148,20 @@ while (1 -eq 1)
         $tenants += $tenant
 
     }
+
+    if ($SingleTenant.IsPresent -and $SingleTenantName -ne "")
+    {
+        $SingleTenantKey = Get-TenantKey $SingleTenantName
+
+        #validate that the name is one of the database names about to be processed
+        $tenantKeys = $tenants | select -ExpandProperty TenantKey
+
+        if (-not ($tenantKeys -contains $SingleTenantKey))
+        {
+            throw "The single tenant name '$SingleTenantName' was not found.  Check the spelling and try again."
+        }     
+    }
+
     
     # spawn jobs to spin up load on each tenant
     # note there are limits to using PS jobs at scale; this should only be used for small scale demonstrations 
@@ -154,11 +174,11 @@ while (1 -eq 1)
     # Script block for job that executes the load generation stored procedure on each database 
     $scriptBlock = `
         {
-            param($tenantKey,$server,$database, $AdminUser,$AdminPassword,$DurationMinutes,$intervalMin,$intervalMax,$burstMinDuration,$burstMaxDuration,$baseDtu,$loadFactor,$densityLoadFactor,$dbCount)
+            param($tenantKey,$server,$database, $AdminUser,$AdminPassword,$DurationMinutes,$intervalMin,$intervalMax,$burstMinDuration,$burstMaxDuration,$baseDtu,$loadFactor,$densityLoadFactor,$tenantsCount)
 
             Import-Module "$using:scriptPath\..\Common\CatalogAndDatabaseManagement" -Force
 
-            Write-Output ("Tenant " + $tenantKey + " " + $database + "/" + $server + " Load factor: " + $loadFactor + " Density weighting: " + ($densityLoadFactor*$dbCount)) 
+            Write-Output ("Tenant " + $tenantKey + " " + $database + "/" + $server + " Load factor: " + $loadFactor + " Density weighting: " + ($densityLoadFactor*$tenantsCount)) 
 
             $endTime = [DateTime]::Now.AddMinutes($DurationMinutes)
 
@@ -172,13 +192,13 @@ while (1 -eq 1)
                 if($firstTime)
                 {
                     $snooze = [math]::ceiling((Get-Random -Minimum 0 -Maximum ($intervalMax - $intervalMin)) / $loadFactor)
-                    $snooze = $snooze + ($snooze * $densityLoadFactor * $dbCount)
+                    $snooze = $snooze + ($snooze * $densityLoadFactor * $tenantsCount)
                     $firstTime = $false
                 }
                 else
                 {
                     $snooze = [math]::ceiling((Get-Random -Minimum $intervalMin -Maximum $intervalMax) / $loadFactor)
-                    $snooze = $snooze + ($snooze * $densityLoadFactor * $dbCount)
+                    $snooze = $snooze + ($snooze * $densityLoadFactor * $tenantsCount)
                 }
                 Write-Output ("Snoozing for " + $snooze + " seconds")  
                 Start-Sleep $snooze
@@ -240,6 +260,8 @@ while (1 -eq 1)
         $randomTenantIndex = Get-Random -Minimum 1 -Maximum ($tenants.Count + 1)        
     }
 
+    $i = 1
+
     foreach ($tenant in $tenants)
     {
         # skip further processing if job is already started for this tenant
@@ -255,11 +277,35 @@ while (1 -eq 1)
             Write-Output "`n"
         }
 
-        # use per-tenant factors
-        $burstDtu = $tenant.BurstDtu
-        $loadFactor = $tenant.LoadFactor
 
-        $dbCount = $tenants.Count
+        # Customize the load applied for each tenant
+        if ($SingleTenant)
+        {
+            if ($i -eq $randomTenantIndex) 
+            {
+                # this is the randomly selected database, so use the single-tenant factors
+                $burstDtu = $SingleTenantDtu
+                $loadFactor = $intenseLoadFactor 
+            }        
+            elseif ($randomTenantIndex -eq 0 -and $SingleTenantKey -eq $tenant.TenantKey) 
+            {
+                # this is the named database, so use the single-tenant factors
+                $burstDtu = $SingleTenantDtu
+                $loadFactor = $intenseLoadFactor 
+            }
+            else 
+            {             
+                # use normal tenant factors 
+                $burstDtu = $tenant.BurstDtu
+                $loadFactor = $tenant.LoadFactor
+            }
+        }
+        else 
+        {
+            # use normal tenant factors
+            $burstDtu = $tenant.BurstDtu
+            $loadFactor = $tenant.LoadFactor
+        }
 
         $outputText = " Starting load with load factor $loadFactor with baseline DTU $burstDtu"
     
@@ -273,7 +319,7 @@ while (1 -eq 1)
                 $TenantAdminUser,$TenantAdminPassword,`
                 $DurationMinutes,$intervalMin,$intervalMax,`
                 $burstMinDuration,$burstMaxDuration,$burstDtu,`
-                $loadFactor,$densityLoadFactor,$dbCount)    
+                $loadFactor,$densityLoadFactor,$tenants.Count)    
 
         # add job to dictionary of currently running jobs
         $jobs += @{$job.Name = $job}

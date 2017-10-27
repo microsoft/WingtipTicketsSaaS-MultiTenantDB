@@ -3,21 +3,21 @@
 # Duration of the load generation session. Some activity may continue after this time. 
 $DurationMinutes = 120
 
-# If SingleTenant is enabled (scenario 4), this specifies the tenant database to be overloaded. 
-# If set to "" a random tenant database is chosen.
-$SingleTenantDatabaseName = "contosoconcerthall"
+# If SingleTenant is enabled (scenario 4), this specifies the tenant to be overloaded. 
+# If set to "" a random tenant is chosen.
+$SingleTenantName = "Salix Salsa"
 
 # If true, generator will run once. If false will keep looking for additional tenants and apply load to them 
 $OneTime = $true
 
-$Scenario = 4
+$Scenario = 1
 <# Select the scenario to run 
     Scenario
       0   None
       1   Start a normal intensity load (approx 30 DTU) 
       2   Start a load with longer bursts per database
       3   Start a load with higher DTU bursts per database (approx 70 DTU)  
-      4   Start a high intensity load (approx 95 DTU) on a single tenant plus a normal intensity load on all other tenants 
+      4   Start a high intensity load (approx 45 DTU) on a single tenant plus a normal intensity load on all other tenants 
 #>
 
 ## ------------------------------------------------------------------------------------------------
@@ -128,11 +128,11 @@ if ($Scenario -eq 3)
 
 ### Generate a high intensity load (approx 95 DTU) on a single tenant plas a normal intensity load (40 DTU) on all other tenants
 if ($Scenario -eq 4) 
-{
+<#{
     Write-Output "Not implemented yet" 
     exit
 }
-<#
+#>
 {       
     # First, stop and remove any prior running jobs
     Write-Output "`nClose any previously opened PowerShell load generation sessions before launching another on the same tenants."
@@ -140,7 +140,7 @@ if ($Scenario -eq 4)
     Read-Host "`nPress ENTER to continue"
 
     # Intensity of workload, roughly approximates to DTU 
-    $Intensity = 70
+    $Intensity = 30
 
     # start a new set of load generation jobs for the current databases
     $powershellArgs = `
@@ -151,7 +151,7 @@ if ($Scenario -eq 4)
         "$Intensity",`
         "$DurationMinutes", `
         "-SingleTenant", `
-        "-SingleTenantDatabaseName $SingleTenantDatabaseName"
+        "-SingleTenantName ""$SingleTenantName"""
 
     Start-Process PowerShell.exe -ArgumentList $powershellArgs
 
@@ -160,6 +160,5 @@ if ($Scenario -eq 4)
     
     exit         
 }
-#>
 
 Write-Output "Invalid scenario selected"
