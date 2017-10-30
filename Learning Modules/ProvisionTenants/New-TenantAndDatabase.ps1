@@ -41,6 +41,12 @@ if (Test-TenantKeyInCatalog -Catalog $catalog -TenantKey $tenantKey)
     throw "Tenant '$TenantName' is already registered in the catalog."    
 } 
 
+# check the venue type name is valid
+if (-not(Test-ValidVenueType -Catalog $catalog -VenueType $VenueType))
+{
+    throw "Invalid venue type '$VenueType'"
+}
+
 # use the default server 
 $serverName = $config.TenantsServerNameStem + $wtpUser.Name
 
