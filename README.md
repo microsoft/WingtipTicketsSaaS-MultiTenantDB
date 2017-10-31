@@ -1,4 +1,4 @@
-## WingtipTicketsSaaS-MultiTenantDB
+## Wingtip Tickets SaaS - Multi-Tenant Database
 Sample multi-tenant SaaS application and management scripts built on SQL Database using a sharded multi-tenant database model. This contrasts with the strict database-per-tenant model used in the base WingtipSaaS sample. 
 
 This project provides a sample SaaS application that embodies many common SaaS patterns that can be used with Azure SQL Database.  The sample is based on an event-management and ticket-selling scenario for small venues.  Each venue is a 'tenant' of the SaaS application. The application is functionally identical to the other Wingtip Tickets SaaS samples.  
