@@ -45,7 +45,7 @@ if ($Scenario -eq 1)
     Write-Output "Provisioning complete for tenant '$TenantName'"
 
     # Open the events page for the new venue
-    Start-Process "http://events.wtp-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
+    Start-Process "http://events.wingtip-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
     
     exit
 }
@@ -64,7 +64,7 @@ if ($Scenario -eq 2)
     Write-Output "Provisioning complete for tenant '$TenantName'"
 
     # Open the events page for the new venue
-    Start-Process "http://events.wtp-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
+    Start-Process "http://events.wingtip-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $TenantName)"
     
     exit
 }
