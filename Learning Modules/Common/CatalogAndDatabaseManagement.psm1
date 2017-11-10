@@ -129,6 +129,40 @@ function Add-TenantToCatalog
 
 <#
 .SYNOPSIS
+    Finds names of tenants that match an input string.
+#>
+function Find-TenantNames
+{
+    param(
+        [parameter(Mandatory=$true)]
+        [object]$Catalog,
+
+        [parameter(Mandatory=$true)]
+        [string] $SearchString
+    )
+    Test-LegalNameFragment $SearchString
+
+    $config = Get-Configuration
+
+    $adminUserName = $config.CatalogAdminUserName
+    $adminPassword = $config.CatalogAdminPassword
+   
+    $commandText = "SELECT TenantName from Tenants WHERE TenantName LIKE '%$SearchString%'";
+             
+    $tenantNames = Invoke-SqlAzureWithRetry `
+        -Username $adminUserName `
+        -Password $adminPassword `
+        -ServerInstance $catalog.FullyQualifiedServerName `
+        -Database $catalog.Database.DatabaseName `
+        -ConnectionTimeout 45 `
+        -Query $commandText `
+
+    return $tenantNames            
+}
+
+
+<#
+.SYNOPSIS
     Initializes and returns a catalog object based on the catalog database created during deployment of the
     WTP application.  The catalog contains the initialized shard map manager and shard map, which can be used to access
     the associated databases (shards) and tenant key mappings.
@@ -708,6 +742,56 @@ function New-TenantsDatabase
     return $database
 
 }
+
+
+<#
+.SYNOPSIS
+    Opens tenant-related resources in the portal.
+#>
+function Open-TenantResourcesInPortal
+{
+    param(
+        [parameter(Mandatory=$true)]
+        [object]$Catalog,
+
+        [parameter(Mandatory=$true)]
+        [string]$TenantName,
+
+        [parameter(Mandatory=$true)]
+        [string[]]$ResourceTypes
+
+    )
+    # get the tenant object
+    $tenant = Get-Tenant `
+        -Catalog $Catalog `
+        -TenantName $TenantName
+
+    $subscriptionId = $tenant.Database.ResourceId.Split('/',4)[2]
+    $ResourceGroupName = $tenant.Database.ResourceGroupName
+    $serverName = $tenant.Database.ServerName
+    $databaseName = $tenant.Database.DatabaseName
+
+    if ($ResourceTypes -contains 'server')
+    {
+        # open the server in the portal
+        Start-Process "https://portal.azure.com/#resource/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Sql/servers/$serverName/overview"
+    }
+
+    if ($ResourceTypes -contains 'elasticpool' -and $tenant.Database.CurrentServiceObjectiveName -eq 'ElasticPool')
+    {
+        $poolName = $tenant.Database.ElasticPoolName
+
+        # open the elastic pool blade in the portal
+        Start-Process "https://portal.azure.com/#resource/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Sql/servers/$serverName/elasticPools/$poolName/overview"
+    }
+
+    if ($ResourceTypes -contains 'database')
+    {
+        # open the database blade in the portal
+        Start-Process "https://portal.azure.com/#resource/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Sql/servers/$serverName/databases/$databaseName/overview"
+    }
+}
+
 
 <#
 .SYNOPSIS
