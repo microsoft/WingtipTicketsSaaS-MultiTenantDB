@@ -27,7 +27,7 @@ function Get-Configuration
         TenantsDatabaseName = "tenants1"
         TenantsDatabaseNameStem = "tenants"
         TenantsDatabaseServiceObjective = "S2"
-        TenantsDatabaseSingletonServiceObjective = "S0"
+        TenantsDatabaseSingletonServiceObjective = "S2"
         TenantsDatabaseCopyTemplate = "tenantsdatabasecopytemplate.json"
         CatalogShardMapName = "tenantcatalog"
         CatalogAdminUserName = "developer"
