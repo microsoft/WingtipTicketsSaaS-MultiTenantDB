@@ -37,6 +37,8 @@ function Get-Configuration
         StorageKeyType = "SharedAccessKey"
         StorageAccessKey = (ConvertTo-SecureString -String "?" -AsPlainText -Force)
         DefaultVenueType = "multipurpose"
+        AdhocReportingDatabaseName = "adhocreporting"
+        AdhocReportingDatabaseServiceObjective = "S0"
         TenantNameBatch = @(
             ("Poplar Dance Academy","dance","98402"),
             ("Blue Oak Jazz Club","blues","98201"),
