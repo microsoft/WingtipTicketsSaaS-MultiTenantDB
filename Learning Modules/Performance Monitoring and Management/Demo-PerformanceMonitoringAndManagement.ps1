@@ -5,9 +5,9 @@ $DurationMinutes = 120
 
 # If SingleTenant is enabled (scenario 5), this specifies the tenant to be overloaded. 
 # If set to "" a random tenant is chosen.
-$SingleTenantName = "Random"
+$SingleTenantName = "Salix Salsa"
 
-$DemoScenario = 5
+$DemoScenario = 1
 <# Select the demo scenario to run 
     Demo    Scenario
       1       Provision a batch of tenants (do this before any of the load generation scenarios)
