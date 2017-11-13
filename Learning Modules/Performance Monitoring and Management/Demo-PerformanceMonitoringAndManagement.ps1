@@ -3,14 +3,13 @@
 # Duration of the load generation session. Some activity may continue after this time. 
 $DurationMinutes = 120
 
-# If SingleTenant is enabled (scenario 4), this specifies the tenant to be overloaded. 
+# If SingleTenant is enabled (scenario 5), this specifies the tenant to be overloaded. 
 # If set to "" a random tenant is chosen.
-$SingleTenantName = "Salix Salsa"
+$SingleTenantName = "Random"
 
-$DemoScenario = 1
+$DemoScenario = 5
 <# Select the demo scenario to run 
     Demo    Scenario
-      0       None
       1       Provision a batch of tenants (do this before any of the load generation scenarios)
       2       Generate normal intensity load (approx 30 DTU) 
       3       Generate load with longer burts per tenant
@@ -27,17 +26,11 @@ Import-Module "$PSScriptRoot\..\UserConfig" -Force
 # Get Azure credentials if not already logged on,  Use -Force to select a different subscription 
 Initialize-Subscription -NoEcho
 
+# Saving context to temp directory that will be retrieved and used to initialize the context in the load generation session
 Save-AzureRmContext -Path $env:temp\AzureContext.json -Force
 
-# Get the resource group and user names used when the WTP application was deployed from UserConfig.psm1.  
+# Get the resource group and user names used when the Wingtip Tickets application was deployed from UserConfig.psm1.  
 $wtpUser = Get-UserConfig
-
-### Default state - enter a valid demo scenaro 
-if ($DemoScenario -eq 0)
-{
-  Write-Output "Please modify the demo script to select a scenario to run."
-  exit
-}
 
 ### Provision a batch of tenants
 if ($DemoScenario -eq 1)
