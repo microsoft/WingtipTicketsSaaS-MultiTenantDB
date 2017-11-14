@@ -1,15 +1,15 @@
--- Connect to and run against the jobaccount database in the catalog-<user> server
+-- Connect to and run against the jobaccount database in the catalog-mt-<user> server
 -- Replace <user> below with the User value used when the sample app was deployed
-DECLARE @WtpUser nvarchar(50);
+DECLARE @User nvarchar(50);
 DECLARE @server1 nvarchar(50);
 DECLARE @server2 nvarchar(50);
-SET @WtpUser = '<user>';
+SET @User = '<user>';
 
 -- Add a target group containing server(s)
 EXEC [jobs].sp_add_target_group @target_group_name = 'DemoServerGroup'
 
 -- Add a server target member, includes all databases in tenant server
-SET @server1 = 'tenants1-' + @WtpUser + '.database.windows.net'
+SET @server1 = 'tenants1-mt-' + @User + '.database.windows.net'
 
 EXEC [jobs].sp_add_target_group_member
 @target_group_name =  'DemoServerGroup',
@@ -19,7 +19,7 @@ EXEC [jobs].sp_add_target_group_member
 @server_name=@server1
 
 -- Add the database target member of the 'golden' database and analysis database
-SET @server2 = 'catalog-' + @WtpUser + '.database.windows.net'
+SET @server2 = 'catalog-mt-' + @User + '.database.windows.net'
 
 EXEC [jobs].sp_add_target_group_member
 @target_group_name =  'DemoServerGroup',
@@ -33,7 +33,7 @@ EXEC [jobs].sp_add_target_group_member
 @membership_type = 'Include',
 @target_type = 'SqlDatabase',
 @server_name=@server2,
-@database_name='adhocanalytics'
+@database_name='adhocreporting'
 
 -- Add a job to deploy new reference data
 EXEC jobs.sp_add_job
