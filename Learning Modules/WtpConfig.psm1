@@ -33,10 +33,16 @@ function Get-Configuration
         CatalogAdminUserName = "developer"
         CatalogAdminPassword = "P@ssword1"
         TenantAdminUserName = "developer"
-        TenantAdminPassword = "P@ssword1"             
+        TenantAdminPassword = "P@ssword1" 
+        JobAccount = "jobaccount"
+        JobAccountDatabaseName = "jobaccount"
+        JobAccountDatabaseServiceObjective = "S2"
+        JobAccountCredentialName = "mydemocred"
         StorageKeyType = "SharedAccessKey"
         StorageAccessKey = (ConvertTo-SecureString -String "?" -AsPlainText -Force)
         DefaultVenueType = "multipurpose"
+        AdhocReportingDatabaseName = "adhocreporting"
+        AdhocReportingDatabaseServiceObjective = "S0"
         TenantNameBatch = @(
             ("Poplar Dance Academy","dance","98402"),
             ("Blue Oak Jazz Club","blues","98201"),

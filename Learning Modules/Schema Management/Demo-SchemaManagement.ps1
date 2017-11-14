@@ -3,6 +3,7 @@
 # if not already done as the schema changes made in the tutorial also impact a local table in that database.
 
 Import-Module "$PSScriptRoot\..\Common\SubscriptionManagement" -Force
+Import-Module "$PSScriptRoot\..\Common\CatalogAndDatabaseManagement" -Force
 Import-Module "$PSScriptRoot\..\UserConfig" -Force
 
 # Get Azure credentials if not already logged on. Use -Force to select a different subscription 
@@ -17,7 +18,7 @@ $wtpUser = Get-UserConfig
     -WtpUser $WtpUser.Name
     
 # Provisions the adhoc analytics database if not already deployed and initializes its schema
-& "$PSScriptRoot\..\Operational Analytics\Adhoc Analytics\Deploy-AdhocAnalyticsDB.ps1" `
+& "$PSScriptRoot\..\Operational Analytics\Adhoc Reporting\Deploy-AdhocReportingDB.ps1" `
     -WtpResourceGroupname $WtpUser.ResourceGroupName `
     -WtpUser $WtpUser.Name `
     -DeploySchema
