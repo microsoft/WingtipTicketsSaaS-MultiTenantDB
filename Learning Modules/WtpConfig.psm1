@@ -33,7 +33,11 @@ function Get-Configuration
         CatalogAdminUserName = "developer"
         CatalogAdminPassword = "P@ssword1"
         TenantAdminUserName = "developer"
-        TenantAdminPassword = "P@ssword1"             
+        TenantAdminPassword = "P@ssword1" 
+        JobAccount = "jobaccount"
+        JobAccountDatabaseName = "jobaccount"
+        JobAccountDatabaseServiceObjective = "S2"
+        JobAccountCredentialName = "mydemocred"
         StorageKeyType = "SharedAccessKey"
         StorageAccessKey = (ConvertTo-SecureString -String "?" -AsPlainText -Force)
         DefaultVenueType = "multipurpose"
