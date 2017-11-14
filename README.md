@@ -1,5 +1,5 @@
 ## Wingtip Tickets SaaS - Multi-Tenant Database
-Sample multi-tenant SaaS application and management scripts built on SQL Database using a sharded multi-tenant database model. This is one of three versions of the application available that differ in the tenancy model used in the database. 
+Sample multi-tenant SaaS application and management scripts built on SQL Database using a sharded multi-tenant database model. This is one of three versions of the application available that differ in the tenancy model used in the database layer. 
 
 ![Versions of Wingtip Tickets SaaS apps](./Documentation/AppVersions.PNG)
 
