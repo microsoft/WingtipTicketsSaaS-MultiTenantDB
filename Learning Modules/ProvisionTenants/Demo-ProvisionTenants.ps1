@@ -1,7 +1,7 @@
-﻿# Script for provisioning and de-provisioning tenants in a multi-tenant database.
+﻿# Script for provisioning and de-provisioning tenants in a sharded multi-tenant database.
 
 # IMPORTANT: Before provisioning tenants using this script ensure the catalog is initialized using 
-# http://events.wtp-mt.<USER>.trafficmanager.net
+# http://events.wingtip-mt.<USER>.trafficmanager.net
 
 # Parameters for scenarios #1, #2 and #3, provision or deprovision a single tenant 
 $TenantName = "Red Maple Racing" #  name of the venue to be added/removed as a tenant
@@ -10,12 +10,12 @@ $PostalCode = "98052"
 
 $Scenario = 1
 <# Select the scenario to run
-    #    Scenario
-    1       Provision a tenant in the default multi-tenant database
-    2       Provision a tenant in a new single-tenant database
-    3       Remove a provisioned tenant
-    4       Provision a batch of tenants
-    5       Get tenant key
+ Scenario
+    1    Provision a tenant into a shared database with other tenants
+    2    Provision a tenant into its own database
+    3    Remove a provisioned tenant
+    4    Provision a batch of tenants into a shared database
+    5    Get tenant key
 
 #>
 
@@ -32,7 +32,7 @@ Initialize-Subscription -NoEcho
 $wtpUser = Get-UserConfig
 $config = Get-Configuration
 
-### Provision a tenant in the default multi-tenant database
+### Provision a tenant in a shared database with other tenants
 if ($Scenario -eq 1)
 {
     New-Tenant `
@@ -51,7 +51,7 @@ if ($Scenario -eq 1)
 }
 #>
 
-### Provision a tenant in a single-tenant database
+### Provision a tenant in its own database
 if ($Scenario -eq 2)
 {
     & $PSScriptRoot\New-TenantAndDatabase `
