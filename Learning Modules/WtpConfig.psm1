@@ -38,6 +38,8 @@ function Get-Configuration
         JobAccountDatabaseName = "jobaccount"
         JobAccountDatabaseServiceObjective = "S2"
         JobAccountCredentialName = "mydemocred"
+        TenantAnalyticsDatabaseName = "tenantanalytics"
+        TenantAnalyticsCSDatabaseName = "tenantanalytics-cs"
         StorageKeyType = "SharedAccessKey"
         StorageAccessKey = (ConvertTo-SecureString -String "?" -AsPlainText -Force)
         DefaultVenueType = "multipurpose"

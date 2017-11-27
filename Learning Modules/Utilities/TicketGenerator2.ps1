@@ -71,6 +71,10 @@ function Get-CurvedSalesForDay
 
     # add some random variation
     [decimal] $variance = (-10, -8, -5, -4, 0, 5, 10) | Get-Random 
+
+    # Set variance for Mad Rush to be 0 so the venue sells 100% of the availble tickets.
+    if ($Curve.Curve -eq "MadRush"){$variance = 0}
+
     $curvePercent = $curvePercent + ($curvePercent * $variance/100)
 
     if ($curvePercent -lt 0) {$curvePercent = 0}
@@ -163,6 +167,8 @@ foreach ($tenantsDatabase in $tenantsDatabases)
     $totalTicketPurchases = 0
     $totalTickets = 0
 
+    $standardPrice = 10
+
     foreach ($venue in $venues)
     {
 
@@ -247,6 +253,56 @@ foreach ($tenantsDatabase in $tenantsDatabases)
                     -ServerInstance $tenantsServer `
                     -Database $tenantsDatabaseName `
                     -Query $customersSql 
+
+        # Initialize script for generating random number of sections for each venues
+        $sectionsSql  = "
+        DELETE FROM [dbo].[EventSections] where VenueId = $venueId 
+        DELETE FROM [dbo].[Sections] where VenueId = $venueId 
+        SET IDENTITY_INSERT [dbo].[Sections] ON 
+        INSERT INTO [dbo].[Sections] 
+        ([VenueId],[SectionId],[SectionName],[SeatRows],[SeatsPerRow],[StandardPrice]) 
+        VALUES `n"
+
+        # Add sections to the venue
+        if     ($venueName -eq 'contosoconcerthall') { }
+        elseif ($venueName -eq 'fabrikamjazzclub')   { }
+        elseif ($venueName -eq 'dogwooddojo')        { }
+        else
+        {
+            # set random number of sections for all other venues   
+            switch ($popularity) 
+                {"popular" {$numSections = Get-Random -Maximum 6 -Minimum 4
+                            $SeatRows = Get-Random -Maximum 20 -Minimum 15
+                            $SeatsPerRow = Get-Random -Maximum 30 -Minimum 25}
+                "moderate" {$numSections = Get-Random -Maximum 4 -Minimum 2
+                            $SeatRows = Get-Random -Maximum 18 -Minimum 12
+                            $SeatsPerRow = Get-Random -Maximum 30 -Minimum 25}
+                "unpopular" {$numSections = Get-Random -Maximum 4 -Minimum 1
+                             $SeatRows = Get-Random -Maximum 10 -Minimum 4
+                             $SeatsPerRow = Get-Random -Maximum 20 -Minimum 10}
+                }
+
+            # Display the sections, seats row and seats per row
+            # Write-Output "Venue has $numSections sections,  $SeatRows rows and $SeatsPerRow seats per row"
+    
+            $Sections = (1..$numSections)
+            Foreach ($section in $Sections){
+                $sectionId = $section
+                $sectionName = "Section " + $section 
+                $sectionsSql += "      ($venueId, $sectionId,'$sectionName',$seatRows,$seatsPerRow,$standardPrice),`n"
+            }
+            $sectionsSql  = $sectionsSql.TrimEnd(("`n",","," ")) + ";`nSET IDENTITY_INSERT [dbo].[Sections] OFF"
+            $sectionsSql += "`nINSERT INTO [dbo].[EventSections] (VenueId, EVentId, SectionId, Price)
+                               SELECT e.VenueId, e.EventId, s.SectionId, s.StandardPrice
+                               FROM [dbo].[Events] e 
+                               JOIN [dbo].[Sections] s on 1=1
+                               WHERE e.VenueId = $($Venue.VenueId) and s.VenueId = $($Venue.VenueId);"
+            $resultsSection = Invoke-SqlAzureWithRetry `
+                -Username "$AdminUserName" -Password "$AdminPassword" `
+                -ServerInstance $tenantsServer `
+                -Database $tenantsDatabaseName `
+                -Query $sectionsSql   
+        }
 
         # initialize ticket purchase identity for this venue
         $ticketPurchaseId = 1
@@ -452,7 +508,7 @@ foreach ($tenantsDatabase in $tenantsDatabases)
                         }
 
                         # set time of day of purchase - distributed randomly over prior 24 hours
-                        $mins = Get-Random -Maximum 1440 -Minimum 0
+                        $mins = Get-Random -Maximum 1140 -Minimum 0
                         $purchaseTime = $purchaseDate.AddMinutes(-$mins)
 
                         # add ticket purchase to batch
