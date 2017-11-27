@@ -8,7 +8,7 @@ AS
     DECLARE @VenueId int
     DECLARE @EventId int
     DECLARE @Offset int   
-    DECLARE @Interval int = 3   -- interval in days between each event
+    DECLARE @Interval int = ROUND(((5 - 2 - 1) * RAND() + 2), 0)    -- interval in days between each event
     DECLARE @OldEventDate datetime
     DECLARE @NewEventDate datetime
     DECLARE @Diff int
@@ -20,7 +20,7 @@ AS
 
     WHILE @@Fetch_Status = 0
     BEGIN
-        SET @Offset = -5    -- offset of the first event in days from current date 
+        SET @Offset = ROUND(((-3 - (-5) - 1) * RAND() + (-5)), 0)    -- offset of the first event in days from current date 
         DECLARE EventCursor CURSOR FOR SELECT EventId FROM [dbo].[Events] WHERE VenueId = @VenueId 
         OPEN EventCursor
         FETCH NEXT FROM EventCursor INTO @EventId

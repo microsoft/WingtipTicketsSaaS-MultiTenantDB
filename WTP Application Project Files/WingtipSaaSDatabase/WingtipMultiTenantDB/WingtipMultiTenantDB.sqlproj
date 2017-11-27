@@ -83,6 +83,7 @@
     <Build Include="dbo\StoredProcedures\sp_NewVenue.sql" />
     <Build Include="dbo\StoredProcedures\sp_DeleteVenue.sql" />
     <Build Include="dbo\Views\EventFacts.sql" />
+    <Build Include="dbo\Tables\LastExtracted.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SetupScripts\PostDeployment.sql" />
