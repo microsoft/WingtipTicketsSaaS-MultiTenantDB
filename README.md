@@ -25,7 +25,7 @@ Management scripts are provided to allow you to explore many management scenario
 
 NOTE: if you install the application you will be charged for the Azure resources created.  Actual costs incurred are based on your subscription offer type but are nominal if the application is not scaled up unreasonably and is deleted promptly after you have finished exploring the tutorials.
 
-More information about the sample app can be found in the [associated tutorials]() (available shortly).
+More information about the sample app can be found in the [associated tutorials](https://docs.microsoft.com/en-us/azure/sql-database/saas-multitenantdb-get-started-deploy) (available shortly).
 
 Also available in the Documentation folder in this repo is an **overview presentation** that provides background, explores alternative database models for multi-tenant apps, and walks through several of the SaaS patterns at a high level. There is also a demo script you can use with the presentation to give others a guided tour of the app and several of the patterns.
 
