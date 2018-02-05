@@ -25,7 +25,7 @@ Management scripts are provided to allow you to explore many management scenario
 
 NOTE: if you install the application you will be charged for the Azure resources created.  Actual costs incurred are based on your subscription offer type but are nominal if the application is not scaled up unreasonably and is deleted promptly after you have finished exploring the tutorials.
 
-More information about the sample app can be found in the [associated tutorials]() (available shortly).
+More information about the sample app can be found in the [associated tutorials](https://docs.microsoft.com/en-us/azure/sql-database/saas-multitenantdb-get-started-deploy).
 
 Also available in the Documentation folder in this repo is an **overview presentation** that provides background, explores alternative database models for multi-tenant apps, and walks through several of the SaaS patterns at a high level. There is also a demo script you can use with the presentation to give others a guided tour of the app and several of the patterns.
 
@@ -37,7 +37,7 @@ To deploy the app to Azure, click the link below.  Deploy the app in a new resou
 </a>
 
 
-After deployment completes, launch the app by browsing to ```http://events.wtp-mt.USER.trafficmanager.net```, substituting *USER* with the value you set during deployment.
+After deployment completes, launch the app by browsing to ```http://events.wingtip-mt.USER.trafficmanager.net```, substituting *USER* with the value you set during deployment.
 
 **IMPORTANT:** If you download and extract the repo or [Learning Modules](https://github.com/Microsoft/WingtipSaaS-MT/tree/master/Learning%20Modules) from a zip file, make sure you unblock the .zip file before extracting. Executable contents (scripts, dlls) may be blocked by Windows when zip files are downloaded from an external source and extracted.
 

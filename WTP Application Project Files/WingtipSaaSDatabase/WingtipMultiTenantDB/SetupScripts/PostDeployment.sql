@@ -30,3 +30,9 @@ VALUES
     ('rockmusic','Rock Music Venue','Rock Concert','Concert', 'Concerts','en-us'),
     ('opera','Opera Venue','Opera','Opera','Operas','en-us');      
 GO
+
+-- Initializing LastExtracted table
+INSERT INTO [dbo].[LastExtracted]
+	([LastExtractedVenueRowVersion],[LastExtractedEventRowVersion],[LastExtractedTicketRowVersion],[Lock])
+	 VALUES (0x0000000000000000, 0x0000000000000000, 0x0000000000000000, 'X');
+GO
