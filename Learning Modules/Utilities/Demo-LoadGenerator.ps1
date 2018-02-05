@@ -13,7 +13,6 @@ $OneTime = $true
 $Scenario = 1
 <# Select the scenario to run 
     Scenario
-      0   None
       1   Start a normal intensity load (approx 30 DTU) 
       2   Start a load with longer bursts per tenant
       3   Start a load with higher DTU bursts per tenant (approx 70 DTU)  
