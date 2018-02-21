@@ -1,4 +1,4 @@
-﻿# Helper script for demonstrating tenant analytics using a SQL Database 
+﻿# Helper script for demonstrating tenant analytics using data extracted and loaded into a SQL Database analytics store 
 
 Import-Module "$PSScriptRoot\..\..\Common\SubscriptionManagement" -Force
 Import-Module "$PSScriptRoot\..\..\UserConfig" -Force
@@ -7,21 +7,20 @@ Import-Module "$PSScriptRoot\..\..\WtpConfig" -Force
 # Get Azure credentials if not already logged on,  Use -Force to select a different subscription 
 Initialize-Subscription -NoEcho
 
-# Get the resource group and user names used when the WTP application was deployed from UserConfig.psm1.  
+# Get the resource group and user names used when the Wingtip Tickets application was deployed from UserConfig.psm1.  
 $wtpUser = Get-UserConfig
 $config = Get-Configuration
 
-$DemoScenario = 1
+$DemoScenario = 0
 
-<# Select the demo scenario that will be run. It is recommended you run the scenarios below in order. 
-     Demo   Scenario
-      0       None
+<# Select the scenario that will be run. It is recommended you run the scenarios below in order. 
+   Scenario
       1       Purchase tickets for events at all venues
       2       Deploy tenant analytics database
       3       Deploy tenant analytics columnstore database (creates a Premium P1 database)
       4       Deploy job account and job account database to manage the data extract jobs
-      5       Create and run job to extract tenant data to a database for analysis
-      6       Create and run job to extract tenant data to a columnstore database for analysis
+      5       Create and run job to extract tenant data to an analytics database
+      6       Create and run job to extract tenant data to an analytics columnstore database
 #>
 
 ## ------------------------------------------------------------------------------------------------
