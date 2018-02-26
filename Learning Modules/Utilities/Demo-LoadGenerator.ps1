@@ -3,9 +3,8 @@
 # Duration of the load generation session. Some activity may continue after this time. 
 $DurationMinutes = 120
 
-# If SingleTenant is enabled (scenario 4), this specifies the tenant to be overloaded. 
-# If set to "" a random tenant is chosen.
-$SingleTenantName = "Salix Salsa"
+# For the Single Tenant burst scenario (scenario 4), this specifies the tenant to be overloaded. 
+$SingleTenantName = "Contoso Concert Hall"
 
 # If true, generator will run once. If false will keep looking for additional tenants and apply load to them 
 $OneTime = $true

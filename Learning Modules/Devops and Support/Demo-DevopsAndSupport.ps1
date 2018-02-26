@@ -1,20 +1,21 @@
-﻿# Find tenants by name, then open the selected tenant's database in the Azure Portal  
-# Start a load on the databases first with scenario 1 and let it run for a few minutes 
-# to make the exploration more interesting.
+﻿# Find tenants by name, then open a selected tenant's database in the Azure Portal  
+
+
+# Start a load on the databases first with scenario 1. To make the exploration more interesting,
+# let it run for a few minutes.
 
 # Duration of the load generation session. Some activity may continue after this time. 
 $DurationMinutes = 60
 
-# This specifies a tenant database to be overloaded in scenario 1. If set to "" a random tenant database is chosen.
-$SingleTenantDatabaseName = "fabrikamjazzclub"
+# This specifies a tenant to be overloaded in scenario 1.
+$SingleTenantName = "Fabrikam Jazz Club"
 
 # In scenario 2, try entering 'jazz' when prompted to quickly locate Fabrikam Jazz Club. 
 
 $DemoScenario = 1
-<# Select the demo scenario to run
-    Demo    Scenario
-      0       None
-      1       Generate a high intensity load (approx 95 DTU) on a single tenant plas a normal intensity load (40 DTU) on all other tenants 
+<# Select the scenario to run
+   Scenario
+      1       Generate a high intensity load (approx 95 DTU) on a single tenant plus a normal intensity load (40 DTU) on all other tenants 
       2       Open a specific tenant's database in the portal plus their public events page
 #>
 
@@ -57,7 +58,9 @@ if ($DemoScenario -eq 1)
         "$($wtpUser.ResourceGroupName)",`
         "$($wtpUser.Name)",`
         "$Intensity",`
-        "$DurationMinutes"
+        "$DurationMinutes", `
+        "-SingleTenant", `
+        "-SingleTenantName ""$SingleTenantName"""
 
     Start-Process PowerShell.exe -ArgumentList $powershellArgs
 
@@ -106,7 +109,7 @@ if ($DemoScenario -eq 2)
     }
 
     # Prompt for selection 
-    Write-Output "Matching tenants: "
+    Write-Output "`nFound matching tenants: "
     $TenantNames | Format-Table Tenant,TenantName -AutoSize
             
 
@@ -122,7 +125,7 @@ if ($DemoScenario -eq 2)
                 $selectedTenantName = $TenantNames[$selectedRow - 1].TenantName
 
                 # Open the events page for the new venue to verify it's working correctly
-                Start-Process "http://events.wtp.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $selectedTenantName)"
+                Start-Process "http://events.wingtip-mt.$($wtpUser.Name).trafficmanager.net/$(Get-NormalizedTenantName $selectedTenantName)"
 
                 # open the database blade in the portal to review performance
                 Open-TenantResourcesInPortal `
