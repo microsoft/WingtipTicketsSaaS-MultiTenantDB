@@ -64,6 +64,12 @@ namespace Events_TenantUserApp.Controllers
                         {
                             tenant.VenueName = venue.VenueName;
                         }
+                        else
+                        {
+                            var tenantName = tenant.TenantName.ToLower();
+                            var sentenceCaseName = tenantName[0].ToString().ToUpper() + tenantName.Substring(1);
+                            tenant.TenantName = sentenceCaseName; 
+                        }                       
 
                     }
                     return View(tenantsModel);
