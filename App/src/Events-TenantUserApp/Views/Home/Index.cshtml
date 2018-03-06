@@ -1,0 +1,91 @@
+﻿﻿@using System.Globalization
+@using System.Security.Policy
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Events_Tenant.Common.Models
+@using Events_TenantUserApp
+@inject IViewLocalizer Localizer
+
+@{
+    Layout = "_HomeLayout";
+}
+
+@{
+    ViewData["Title"] = @Localizer["Events Hub"].Value;
+}
+
+<!-- ------------------------------------------------------------------------------------------------------------------- -->
+<!-- Content -->
+<!-- ------------------------------------------------------------------------------------------------------------------- -->
+
+<div class="container">
+
+    <div class="col-xs-12">
+        <p style="font-size:3rem;font-family:'Segoe UI';font-weight:bold">@Localizer["Welcome to the Wingtip Tickets Platform!"]</p>
+        <hr class="body-hr">
+        <div class="col-xs-11 welcome-text" style="padding:0">
+            <p>
+                @Localizer["Explore what's on at the venues below and enjoy secure ticket purchasing in the cloud. Powered by Microsoft Azure, using SaaS technology built on SQL Database"]
+            </p>
+        </div>
+    </div>
+
+    <div>
+
+        <!-- ------------------------------------------------------------------------------------------------------------------- -->
+        <!-- Tenant List -->
+        <!-- ------------------------------------------------------------------------------------------------------------------- -->
+
+        <div class="col-xs-10 table-body" style="margin-left: 10px; width: 100%;">
+            <table id="table_id" class="table table-bordered responsive-utilities" width="84.5%" style="margin-left: 0%">
+                <thead>
+                    <tr>
+                        <th style="display: none;">Column 2</th>
+
+                        <th style="font-weight: bold;">
+                            @Localizer["Venues"]
+                        </th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            foreach (var tenant in Model)
+                            {
+                                if (tenant.VenueName != null)
+                                {
+                                    <tr>
+                                        <th style="display: none;">
+                                            <a href="@Url.Action("Index", "Events", new { tenant = tenant.TenantName })" target="_blank">@tenant.VenueName </a>
+                                        </th>
+                                        <th>
+                                            <a href="@Url.Action("Index", "Events", new { tenant = tenant.TenantName })" target="_blank">@tenant.VenueName </a>
+                                        </th>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th style="display: none;">
+                                            <a href="" target="_blank">@tenant.TenantName </a>
+                                        </th>
+                                        <th style="pointer-events: none; cursor: default">
+                                            <a href="" target="_blank">@tenant.TenantName (offline)</a>
+                                        </th>
+                                    </tr>
+
+                                }
+                            }
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

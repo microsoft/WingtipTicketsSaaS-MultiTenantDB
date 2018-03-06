@@ -1,0 +1,55 @@
+﻿@using System.Globalization
+@using System.Security.Policy
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Events_Tenant.Common.Models
+@using Events_TenantUserApp
+
+﻿@inject IViewLocalizer Localizer
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="page-heading">
+    <div class="row">
+        <div class="col-xs-1">
+            <div>
+                <img class="logo-image pull-left" src="~/images/ticketmaestro-logo.jpg" />
+            </div>
+        </div>
+        <div class="col-xs-11" style="padding-right: 0.8%">
+            <div class="logo-heading2" style="padding-top:20px"><span style="margin-top:4px;display:inline-block">@Localizer["Wingtip Tickets Platform"]</span></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="logo-heading" style="width: 100.75%;padding-top:20px;height:90px;background-color:#626262"><span>@Localizer["Events Hub"]</span></div>
+        </div>
+    </div>
+</div>
+
+<div class="bodycontainer" style="min-height: 90%; width: 102%;margin-left: -8px">
+    @RenderBody()
+</div>
+
+<footer class="footer" style="width: 102%; margin-left: -8px; margin-bottom: 1px">
+    <div class="footer-left-third">
+        <img class="logo-image pull-left" src="~/images/ticketmaestro-logo.jpg">
+        <div class="logo-heading"><span>@Localizer["Wingtip Tickets Platform"]</span></div>
+        <div class="copyright">
+            <p>Running on Azure SQL Database. &copy; @DateTime.Now.Year @Localizer["Microsoft"] </p>
+        </div>
+    </div>
+    <div class="footer-right-third">
+        <div class="grow">
+            <p><b>@Localizer["Catalog server"]: </b>@Startup.CatalogConfig.CatalogServer.Split('.')[0]</p>
+            <p><b>@Localizer["Catalog database"]: </b>@Startup.CatalogConfig.CatalogDatabase</p>
+        </div>
+        <div class="tutorial-link">
+            <a href=@Startup.DatabaseConfig.LearnHowFooterUrl target="_blank">@Localizer["Learn how to build a SaaS app on SQL database"]</a>
+        </div>
+    </div>
+</footer>
+

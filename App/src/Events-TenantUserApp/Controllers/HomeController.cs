@@ -50,23 +50,38 @@ namespace Events_TenantUserApp.Controllers
                     //get the venue name for each tenant
                     foreach (var tenant in tenantsModel)
                     {
-                        VenuesModel venue = await _tenantRepository.GetVenueDetails(tenant.TenantId);
+                        VenuesModel venue = null;
+                        try
+                        {
+                            venue = await _tenantRepository.GetVenueDetails(tenant.TenantId);
+                        }
+                        catch (Microsoft.Azure.SqlDatabase.ElasticScale.ShardManagement.ShardManagementException ex)
+                        {
+                            _logger.LogError(0, ex, "Tenant '" + tenant.TenantName + "' is unavailable in the catalog");
+                        }
 
                         if (venue != null)
                         {
                             tenant.VenueName = venue.VenueName;
                         }
-                    }
+                        else
+                        {
+                            var tenantName = tenant.TenantName.ToLower();
+                            var sentenceCaseName = tenantName[0].ToString().ToUpper() + tenantName.Substring(1);
+                            tenant.TenantName = sentenceCaseName; 
+                        }                       
 
+                    }
                     return View(tenantsModel);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(0, ex, "Error in getting all tenants in Events Hub");
+                return View("Error", ex.Message);
             }
-
             return View("Error");
+
         }
 
         public IActionResult Error()
