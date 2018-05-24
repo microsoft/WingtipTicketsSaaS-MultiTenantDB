@@ -149,7 +149,7 @@
       <Project>{a8c26517-6521-4982-9c68-942fb4185c6b}</Project>
       <Name>Events-TenantUserApp.EF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Events-TenantUserApp\Events-TenantUserApp.xproj">
+    <ProjectReference Include="..\..\src\Events-TenantUserApp\Events-TenantUserApp.csproj">
       <Project>{f23dd200-d0f4-4cfc-b443-692fd6459587}</Project>
       <Name>Events-TenantUserApp</Name>
     </ProjectReference>
