@@ -27,12 +27,12 @@
     "tenantServerName": "[concat('tenants1','-',variables('multiTenantSuffix'))]",
     "tenantDatabaseName": "tenants1",
     "tenantServer": "[concat(variables('tenantservername'),'-',variables('lowerCaseUser'))]",
-    "tenantDatabaseStorageUri": "[concat('https://wingtipsaas.blob.core.windows.net/bacpacs-mt/',variables('tenantDatabaseName'),'.bacpac')]",
-    "catalogDatabaseStorageUri": "https://wingtipsaas.blob.core.windows.net/bacpacs-mt/wingtipcatalogdb.bacpac",
-    "baseTenantDatabaseStorageUri": "https://wingtipsaas.blob.core.windows.net/bacpacs-mt/basetenantdb.bacpac",
+    "tenantDatabaseStorageUri": "[concat('https://wingtipsaas1.blob.core.windows.net/bacpacs-mt/',variables('tenantDatabaseName'),'.bacpac')]",
+    "catalogDatabaseStorageUri": "https://wingtipsaas1.blob.core.windows.net/bacpacs-mt/wingtipcatalogdb.bacpac",
+    "baseTenantDatabaseStorageUri": "https://wingtipsaas1.blob.core.windows.net/bacpacs-mt/basetenantdb.bacpac",
     "wtpEventsAppTrafficManagerUniqueDnsName": "[concat('events.wingtip','-',variables('multiTenantSuffix'),'.',variables('lowerCaseUser'))]",
     "wtpEventsApp": "[concat('events-wingtip-',variables('multiTenantSuffix'),'-',variables('lowerCaseUser'))]",
-    "wtpEventsAppPackageUri": "https://wingtipsaas.blob.core.windows.net/packages-mt/eventsAppPackage.zip"
+    "wtpEventsAppPackageUri": "https://wingtipsaas1.blob.core.windows.net/packages-mt/eventsAppPackage.zip"
   },
   "resources": [
     {
@@ -264,7 +264,7 @@
           "type": "config",
           "name": "appsettings",
           "properties": {
-            "BlobPath": "https://wingtipsaas.blob.core.windows.net/images-mt/",
+            "BlobPath": "https://wingtipsaas1.blob.core.windows.net/images-mt/",
             "ConnectionTimeOut": "30",
             "CatalogDatabase": "[variables('catalogDatabaseName')]",
             "CatalogServer": "[variables('catalogServer')]",
